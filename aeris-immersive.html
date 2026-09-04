@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="ru"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aeris. — частная авиация</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=Inter:wght@300;400;500;600&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { background: #f5f0ea; }
+    body { overflow-x: clip; font-family: 'Inter', sans-serif; color: #213138; }
+    img { display: block; }
+    button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+    a { text-decoration: none; color: inherit; }
+
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+
+    /* ---------- Preloader ---------- */
+    .preloader {
+      position: fixed; inset: 0; z-index: 100; background: #213138;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 1.5s cubic-bezier(0.45, 0, 0.15, 1);
+    }
+    .pre-word { font-family: 'Syne', sans-serif; font-size: 2.6rem; color: #fff;
+      letter-spacing: -0.02em; display: inline-flex; align-items: center; font-weight: 700; }
+    .pre-word .l { opacity: 0; }
+    .pre-word .l.dot { font-weight: 900; }
+    .pre-cursor { display: inline-block; width: 3px; height: 1.1em; background: #fff;
+      border-radius: 2px; margin-left: 2px; animation: blink 0.7s step-end infinite; }
+
+    /* ---------- Nav ---------- */
+    .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 24px; }
+    @media (min-width:768px){ .nav{ padding: 24px 40px; } }
+    @media (min-width:1024px){ .nav{ padding: 24px 64px; } }
+    .nav-logo { font-family: 'Syne', sans-serif; font-size: 1.25rem; font-weight: 700;
+      transition: color 0.35s ease; }
+    .nav-logo .dot { font-weight: 900; }
+    .nav-toggle { display: flex; flex-direction: column; gap: 7px; width: 28px; align-items: flex-end; }
+    .nav-toggle .ln { width: 28px; height: 1px; background: currentColor; transition: width 0.3s ease, background 0.35s ease; }
+    .nav-toggle:hover .ln.top { width: 20px; }
+    .nav-toggle-color { transition: color 0.35s ease; }
+
+    .menu { position: fixed; inset: 0; z-index: 40; background: #f5f0ea;
+      display: none; flex-direction: column; align-items: center; justify-content: center; gap: 8px; }
+    .menu.open { display: flex; }
+    .menu a { font-family: 'Syne', sans-serif; font-size: 2.25rem; font-weight: 300;
+      letter-spacing: 0.1em; text-transform: uppercase; color: #000; transition: color 0.2s ease; }
+    .menu a:hover { color: #6b7280; }
+
+    /* ---------- Hero ---------- */
+    .hero { position: relative; min-height: 100vh; overflow: visible;
+      background-image: var(--bg); background-size: cover; background-position: center center; background-repeat: no-repeat; }
+    .hero-text-block { position: relative; z-index: 10; opacity: 0; transform: translateY(-28px); }
+    .hero-text-block.in { opacity: 1; transform: translateY(0);
+      transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s, transform 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s; }
+    .hero-heading-top { display: flex; align-items: flex-end; justify-content: space-between;
+      padding: 0 24px; margin-bottom: -0.04em; }
+    @media (min-width:768px){ .hero-heading-top{ padding: 0 40px; } }
+    @media (min-width:1024px){ .hero-heading-top{ padding: 0 64px; } }
+    .hero-own-the { font-family: 'Syne', sans-serif; font-weight: 800; text-transform: uppercase;
+      color: #000; letter-spacing: -0.03em; line-height: 1; }
+    .hero-subtitle-desktop { font-family: 'Syne', sans-serif; font-weight: 700; text-align: right;
+      font-size: clamp(10px, 0.95vw, 14px); max-width: 300px; opacity: 0.7; line-height: 1.6;
+      margin-bottom: 0.2em; letter-spacing: 0.02em; color: #000; }
+    .hero-headline-wrap { overflow: hidden; }
+    .hero-extraordinary { font-family: 'Syne', sans-serif; font-weight: 800; text-transform: uppercase;
+      color: #000; letter-spacing: -0.03em; padding: 0 24px; }
+    @media (min-width:768px){ .hero-extraordinary{ padding: 0 40px; } }
+    @media (min-width:1024px){ .hero-extraordinary{ padding: 0 64px; } }
+    .hero-subtitle-mobile { font-family: 'Syne', sans-serif; font-weight: 600; padding: 0 24px;
+      font-size: clamp(12px, 3vw, 15px); opacity: 0.65; margin-top: 0.9em; color: #000; }
+
+    @media (max-width: 639px) {
+      .hero-subtitle-desktop { display: none !important; }
+      .hero-subtitle-mobile  { display: block !important; }
+      .hero-text-block { padding-top: 90px !important; }
+      .hero-heading-top { justify-content: flex-start !important; }
+      .hero-own-the { font-size: 7.5vw !important; }
+      .hero-extraordinary { font-size: 14.5vw !important; white-space: normal !important; word-break: break-word !important; line-height: 0.9 !important; }
+    }
+    @media (min-width: 640px) and (max-width: 1023px) {
+      .hero-subtitle-desktop { display: none !important; }
+      .hero-subtitle-mobile  { display: block !important; }
+      .hero-text-block { padding-top: 110px !important; }
+      .hero-heading-top { justify-content: flex-start !important; }
+      .hero-own-the { font-size: 5.5vw !important; }
+      .hero-extraordinary { font-size: 11vw !important; white-space: normal !important; word-break: break-word !important; line-height: 0.9 !important; }
+    }
+    @media (min-width: 1024px) {
+      .hero-subtitle-desktop { display: block !important; }
+      .hero-subtitle-mobile  { display: none !important; }
+      .hero-text-block { padding-top: calc(28vh - 50px) !important; }
+      .hero-own-the { font-size: 3vw !important; }
+      .hero-extraordinary { font-size: clamp(52px, 6.5vw, 9vw) !important; white-space: nowrap !important; line-height: 0.88 !important; }
+    }
+
+    /* ---------- House (scroll-driven, fixed) ---------- */
+    .house-wrap { position: fixed; z-index: 22; pointer-events: none; will-change: transform;
+      bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; min-width: 1400px; }
+    .house-inner { transform: translateY(102vh); }
+    .house-inner.lifting { transform: translateY(0);
+      transition: transform 1.5s cubic-bezier(0.45,0,0.15,1) 0.4s; }
+    .house-inner.lift-done { transition: none; }
+    .house-inner img { width: 100%; }
+
+    /* ---------- Section 5: Dark statement + stats (sticky) ---------- */
+    .s2-outer { position: relative; height: 200vh; z-index: 20; }
+    .s2-spacer { height: 4vh; background: #1a1a1a; }
+    .s2-section { position: sticky; top: 0; height: 100vh; background: #1a1a1a; overflow: hidden; }
+    .s2-content { display: flex; flex-direction: column; padding: 0 24px;
+      padding-top: clamp(30px, 4vw, 60px); padding-bottom: clamp(60px, 8vw, 120px); }
+    @media (min-width:768px){ .s2-content{ padding-left: 40px; padding-right: 40px; } }
+    @media (min-width:1024px){ .s2-content{ padding-left: 64px; padding-right: 64px; } }
+    .s2-statement-wrap { max-width: 1200px; margin: 0 auto; width: 100%; padding-left: 25%; }
+    .s2-statement { font-family: 'Inter', sans-serif; font-weight: 300; color: #e8e4df;
+      letter-spacing: -0.02em; line-height: 1.35; white-space: nowrap; font-size: clamp(22px, 2.6vw, 42px); }
+    .s2-stats-row { max-width: 1200px; margin: 0 auto; width: 100%; padding-left: 25%;
+      margin-top: clamp(48px, 6vw, 80px); display: flex; }
+    .s2-stat { flex: 1; }
+    .s2-stat + .s2-stat { border-left: 1px solid rgba(255,255,255,0.2); padding-left: clamp(20px, 2.5vw, 40px); }
+    .s2-num { font-family: 'Inter', sans-serif; font-weight: 300; color: #fff;
+      font-size: clamp(36px, 4.5vw, 72px); line-height: 1.1; }
+    .s2-label { font-family: 'Inter', sans-serif; font-weight: 400; color: rgba(255,255,255,0.6);
+      font-size: clamp(12px, 1.1vw, 16px); margin-top: clamp(4px, 0.5vw, 8px); letter-spacing: 0.01em; }
+    @media (max-width: 767px) {
+      .s2-statement-wrap, .s2-stats-row { padding-left: 0 !important; }
+    }
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .s2-statement-wrap, .s2-stats-row { padding-left: 15% !important; }
+      .s2-section { min-height: 70vh; }
+    }
+
+    /* ---------- Section 6: Hover-expand gallery ---------- */
+    .s3-gallery-section { position: relative; z-index: 25; margin-top: -100vh;
+      background: #1a1a1a; height: 100vh; overflow: hidden; }
+    .s3-ticker-wrap { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      overflow: hidden; z-index: 0; pointer-events: none; }
+    .ticker-track { display: flex; }
+    .ticker-track span { font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: clamp(100px, 14vw, 220px); color: #fff; white-space: nowrap;
+      letter-spacing: -0.02em; user-select: none; padding-right: 0.3em; opacity: 0.10; }
+    .s3-gallery-content { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center;
+      height: 100%; padding: clamp(24px, 4vw, 60px); }
+    .gallery-expand-row { display: flex; gap: 6px; height: 70%; max-width: 1200px; width: 100%; }
+    .gallery-expand-item { flex: 1 1 0%; height: 100%; border-radius: 12px; overflow: hidden;
+      cursor: pointer; transition: flex 0.5s cubic-bezier(0.4,0,0.2,1); background: #222; }
+    .gallery-expand-row:hover .gallery-expand-item { flex: 1 1 0%; }
+    .gallery-expand-item:hover { flex: 4 1 0%; }
+    .gallery-expand-item video, .gallery-scene { width: 100%; height: 100%; object-fit: cover; }
+    .gallery-scene { background-size: 500% 100%; transition: transform 0.7s cubic-bezier(0.4,0,0.2,1), filter 0.7s ease; }
+    .gallery-expand-item:hover .gallery-scene { transform: scale(1.035); filter: saturate(1.12); }
+
+    @media (max-width: 1023px) {
+      .s3-gallery-section { height: auto; min-height: 100vh; overflow: visible; }
+      .s3-ticker-wrap { position: sticky; top: 0; height: 100vh; width: 100%; margin-bottom: -100vh; }
+      .s3-gallery-content { height: auto; align-items: flex-start; padding: 80px 16px 60px; }
+      .gallery-expand-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; height: auto; width: 100%; max-width: 700px; }
+      .gallery-expand-item { flex: none; height: auto; aspect-ratio: 4/5; border-radius: 10px; transition: transform 0.3s ease; }
+      .gallery-expand-item:hover { flex: none; transform: scale(1.02); }
+      .gallery-expand-item:last-child:nth-child(odd) { grid-column: 1 / -1; max-width: calc(50% - 4px); justify-self: center; }
+    }
+    @media (max-width: 479px) {
+      .s3-gallery-content { padding: 60px 12px 48px; }
+      .gallery-expand-row { gap: 6px; }
+    }
+  </style>
+<style>
+.house-wrap{min-width:980px;width:min(1180px,92vw)}
+.house-inner img{filter:drop-shadow(0 28px 30px rgba(33,49,56,.22))}
+@media(max-width:767px){.house-wrap{min-width:720px;width:175vw}}
+</style>
+</head>
+<body>
+
+  <!-- ===== PRELOADER ===== -->
+  <div class="preloader" id="preloader">
+    <div class="pre-word" id="preWord"></div>
+  </div>
+
+  <!-- ===== NAV ===== -->
+  <nav class="nav">
+    <div class="nav-logo" id="navLogo">Aeris<span class="dot">.</span></div>
+    <button class="nav-toggle nav-toggle-color" id="navToggle" aria-label="Меню">
+      <span class="ln top"></span><span class="ln bot"></span>
+    </button>
+  </nav>
+  <div class="menu" id="menu">
+    <a href="#">Флот</a><a href="#">Философия</a><a href="#">Маршруты</a><a href="#">Связаться</a>
+  </div>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-text-block" id="heroText">
+      <div class="hero-heading-top">
+        <div class="hero-own-the">Лететь</div>
+        <div class="hero-subtitle-desktop">Частные маршруты, созданные<br>вокруг вашего времени.</div>
+      </div>
+      <div class="hero-headline-wrap">
+        <div class="hero-extraordinary">Вне расписаний</div>
+      </div>
+      <div class="hero-subtitle-mobile">Частная авиация с точностью,<br>тишиной и свободой маршрута.</div>
+    </div>
+  </section>
+
+  <!-- ===== HOUSE (scroll-driven) ===== -->
+  <div class="house-wrap" id="houseWrap">
+    <div class="house-inner" id="houseInner">
+      <img id="houseImg" src="aeris-jet.png" alt="" aria-hidden="true">
+    </div>
+  </div>
+
+  <!-- ===== SECTION 5: dark statement + stats ===== -->
+  <div class="s2-outer" id="s2outer">
+    <div class="s2-spacer"></div>
+    <div class="s2-section" id="darkSection">
+      <div class="s2-content">
+        <div class="s2-statement-wrap">
+          <div class="s2-statement">Каждый маршрут мы собираем вручную —<br>от самолёта и экипажа до трансфера<br>и времени вылета. Точность для нас<br>не преимущество. Это правило.</div>
+        </div>
+        <div class="s2-stats-row">
+          <div class="s2-stat"><div class="s2-num" data-end="120" data-suffix="+">0+</div><div class="s2-label">Самолётов в сети</div></div>
+          <div class="s2-stat"><div class="s2-num" data-end="12" data-suffix="">0</div><div class="s2-label">Регионов полёта</div></div>
+          <div class="s2-stat"><div class="s2-num" data-end="98" data-suffix="%">0%</div><div class="s2-label">Вылетов без задержек</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SECTION 6: hover-expand gallery ===== -->
+  <div class="s3-gallery-section" id="gallery">
+    <div class="s3-ticker-wrap">
+      <div class="ticker-track">
+        <span>Aeris.&nbsp;&nbsp;&nbsp;Aeris.&nbsp;&nbsp;&nbsp;Aeris.&nbsp;&nbsp;&nbsp;Aeris.&nbsp;&nbsp;&nbsp;Aeris.&nbsp;&nbsp;&nbsp;Aeris.&nbsp;&nbsp;&nbsp;Aeris.&nbsp;&nbsp;&nbsp;Aeris.&nbsp;&nbsp;</span>
+        <span>Aeris.&nbsp;&nbsp;&nbsp;Aeris.&nbsp;&nbsp;&nbsp;Aeris.&nbsp;&nbsp;&nbsp;Aeris.&nbsp;&nbsp;&nbsp;Aeris.&nbsp;&nbsp;&nbsp;Aeris.&nbsp;&nbsp;&nbsp;Aeris.&nbsp;&nbsp;&nbsp;Aeris.&nbsp;&nbsp;</span>
+      </div>
+    </div>
+    <div class="s3-gallery-content">
+      <div class="gallery-expand-row" id="galleryRow"></div>
+    </div>
+  </div>
+
+  <script>
+    
+    const BG_IMG = 'aeris-clouds.png';
+    document.getElementById('hero').style.setProperty('--bg', `url("${BG_IMG}")`);
+
+    const GALLERY_POSITIONS = ['0%','25%','50%','75%','100%'];
+    const galleryRow = document.getElementById('galleryRow');
+    GALLERY_POSITIONS.forEach((position, index)=>{
+      const item = document.createElement('div'); item.className='gallery-expand-item';
+      const image = document.createElement('div'); image.className='gallery-scene';
+      image.style.backgroundImage='url("aeris-gallery.png")';
+      image.style.backgroundPosition=position+' center';
+      image.setAttribute('role','img');
+      image.setAttribute('aria-label',['Крыло над облаками','Салон самолёта','Турбина','Полоса на рассвете','Альпийский аэродром'][index]);
+      item.appendChild(image); galleryRow.appendChild(item);
+    });
+
+    /* ---------- Preloader typewriter ---------- */
+    const FULL_TEXT = 'Aeris.';
+    const CHAR_INTERVAL = 140, TYPE_START = 600;
+    const LIFT_AT = TYPE_START + 6 * CHAR_INTERVAL + 700;
+    const preWord = document.getElementById('preWord');
+    const letterEls = [];
+    for (const ch of FULL_TEXT) {
+      const s = document.createElement('span'); s.className = 'l' + (ch === '.' ? ' dot' : ''); s.textContent = ch;
+      preWord.appendChild(s); letterEls.push(s);
+    }
+    const cursor = document.createElement('span'); cursor.className = 'pre-cursor'; preWord.appendChild(cursor);
+
+    letterEls.forEach((el, i) => setTimeout(() => { el.style.opacity = 1; }, TYPE_START + i * CHAR_INTERVAL));
+    setTimeout(() => { cursor.style.display = 'none'; }, LIFT_AT - 150);
+
+    const preloader = document.getElementById('preloader');
+    const houseInner = document.getElementById('houseInner');
+    const heroText = document.getElementById('heroText');
+
+    setTimeout(() => {
+      preloader.style.transform = 'translateY(-100%)';
+      houseInner.classList.add('lifting');   // house rises from below
+    }, LIFT_AT);
+    setTimeout(() => { heroText.classList.add('in'); }, LIFT_AT + 1300);
+
+    let liftDone = false;
+    setTimeout(() => {
+      liftDone = true;
+      preloader.style.transition = 'none';
+      houseInner.classList.add('lift-done');
+      updateHousePosition();
+    }, LIFT_AT + 2100);
+
+    /* ---------- Nav scroll color (dark sections at viewport top) ---------- */
+    const navLogo = document.getElementById('navLogo');
+    const navToggle = document.getElementById('navToggle');
+    const darkRefs = [document.getElementById('darkSection'), document.getElementById('gallery')];
+    function updateNavColor() {
+      const onDark = darkRefs.some(el => { const r = el.getBoundingClientRect(); return r.top <= 0 && r.bottom > 0; });
+      const c = onDark ? '#ffffff' : '#213138';
+      navLogo.style.color = c; navToggle.style.color = c;
+    }
+
+    /* ---------- Menu toggle ---------- */
+    const menu = document.getElementById('menu');
+    let menuOpen = false;
+    navToggle.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      menu.classList.toggle('open', menuOpen);
+      navToggle.innerHTML = menuOpen
+        ? '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>'
+        : '<span class="ln top"></span><span class="ln bot"></span>';
+    });
+    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { menuOpen = false; menu.classList.remove('open'); navToggle.innerHTML = '<span class="ln top"></span><span class="ln bot"></span>'; }));
+
+    /* ---------- Scroll-driven house position ---------- */
+    const houseWrap = document.getElementById('houseWrap');
+    const houseImg = document.getElementById('houseImg');
+    const hero = document.getElementById('hero');
+    function smoothstep(t){ return t*t*(3-2*t); }
+    function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+    function updateHousePosition() {
+      if (!liftDone) return;
+      const vw = window.innerWidth, vh = window.innerHeight;
+      const baseW = Math.max(vw, 1400);
+      const heroRect = hero.getBoundingClientRect();
+      const heroH = heroRect.height;
+      const darkRect = document.getElementById('darkSection').getBoundingClientRect();
+      const imgH = houseImg.offsetHeight || (baseW * (houseImg.naturalHeight / houseImg.naturalWidth)) || 600;
+
+      const triggerPoint = -(heroH * 0.30);
+      const endPoint = heroRect.top - (darkRect.bottom - vh);
+      const progress = clamp((heroRect.top - triggerPoint) / (endPoint - triggerPoint), 0, 1);
+
+      if (progress <= 0) {
+        houseWrap.style.top = ''; houseWrap.style.left = '';
+        houseWrap.style.bottom = '0'; houseWrap.style.transform = 'translateX(-50%)';
+        houseWrap.style.transformOrigin = '';
+        return;
+      }
+      const t = smoothstep(smoothstep(progress));
+      const startX = (vw - baseW) / 2, startY = vh - imgH;
+      const finalScale = 1.45;
+      const finalX = (vw - baseW * finalScale) / 2;
+      const mobileOffset = vw < 1024 ? -250 : 4;
+      const finalY = darkRect.bottom - imgH * finalScale + 500 + mobileOffset;
+
+      const currentX = startX + (finalX - startX) * t;
+      const currentY = startY + (finalY - startY) * t;
+      const currentScale = 1 + (finalScale - 1) * t;
+
+      houseWrap.style.bottom = ''; houseWrap.style.left = '0'; houseWrap.style.top = '0';
+      houseWrap.style.transform = `translate(${currentX}px, ${currentY}px) scale(${currentScale})`;
+      houseWrap.style.transformOrigin = 'top left';
+    }
+    window.addEventListener('scroll', () => { updateNavColor(); updateHousePosition(); }, { passive: true });
+    window.addEventListener('resize', updateHousePosition, { passive: true });
+    updateNavColor();
+
+    /* ---------- CountUp (IntersectionObserver) ---------- */
+    const nums = document.querySelectorAll('.s2-num');
+    const countObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const el = e.target; const end = +el.dataset.end; const suffix = el.dataset.suffix || '';
+          const dur = 2000; const t0 = performance.now();
+          function step(now){
+            const p = clamp((now - t0) / dur, 0, 1);
+            const eased = 1 - Math.pow(1 - p, 3);
+            el.textContent = Math.round(eased * end) + suffix;
+            if (p < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+          countObs.unobserve(el);
+        }
+      });
+    }, { threshold: 0.3 });
+    nums.forEach(n => countObs.observe(n));
+  </script>
+
+
+</body>
+</html>
