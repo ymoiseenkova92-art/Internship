@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ФОРМА — мастерские и вещи с историей</title>
+<meta name="description" content="Независимая платформа предметного дизайна и авторских мастерских.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;550&display=swap" rel="stylesheet">
+<style>
+/* ================================================================
+   СТИЛЬ САЙТА «ФОРМА» — без изменений, кроме шапки:
+   собственная строка навигации удалена, её место занял каркас.
+   ================================================================ */
+:root{--black:#000;--elevated:#0a0a0a;--teal:#1e2c31;--white:#fff;--z30:#d4d4d8;--z40:#a1a1aa;--z50:#71717a;--cool:#9dabad;--radius:12px;--pill:9999px}
+*{box-sizing:border-box}html{scroll-behavior:smooth;background:var(--black)}body{margin:0;background:var(--black);color:var(--white);font-family:Inter,Helvetica,Arial,sans-serif;font-size:16px;font-weight:420;line-height:1.5;font-feature-settings:"ss03";overflow-x:hidden}a,button{font:inherit}a{color:inherit;text-decoration:none}button{color:inherit;background:none;border:0;cursor:pointer}img{display:block}.display{font-family:"Neue Haas Grotesk Display","Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:330}.foot-brand{font-size:20px;font-weight:550;letter-spacing:-.4px;color:#fff;text-decoration:none}.footer a{color:#fff;text-decoration:none;font-size:14px}.pill{min-height:48px;border-radius:9999px;padding:12px 24px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;transition:background .2s,color .2s,transform .2s}.pill:active{transform:scale(.98)}.outline{background:#000;color:#fff;border:2px solid #fff}.outline:hover{background:#fff;color:#000}.hero{min-height:650px;padding:calc(var(--bar) + 96px) var(--pad) 128px;display:grid;align-content:end;background:#000}.hero-inner{width:min(1540px,100%);margin:auto}.eyebrow{font-size:12px;line-height:1.2;letter-spacing:.72px;text-transform:uppercase;color:var(--z40);margin:0 0 24px}.hero h1{max-width:1180px;font-size:clamp(64px,8vw,96px);line-height:1;letter-spacing:2.4px;margin:0}.hero-row{margin-top:64px;display:flex;justify-content:space-between;align-items:end;gap:48px}.lead{max-width:600px;font-size:18px;font-weight:550;line-height:1.56;margin:0}.photo{height:min(82vh,880px);min-height:560px;position:relative;overflow:hidden;border-radius:20px 20px 0 0;background:#0a0a0a}.photo img{width:106%;height:106%;margin:-3%;display:block;object-fit:cover;transform:scale(1.04);transition:transform 1s cubic-bezier(.4,0,.2,1)}.photo.loaded img{transform:scale(1)}.intro{padding:160px var(--pad);background:#000}.intro-inner,.features-inner,.story-inner{width:min(1440px,100%);margin:auto}.intro h2{max-width:1080px;font-size:clamp(48px,6vw,70px);line-height:1;margin:0}.intro .body{max-width:720px;margin:64px 0 0 auto;font-size:18px;line-height:1.56;color:var(--z40)}.features{padding:128px var(--pad);background:#000}.feature-grid{margin-top:64px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}.feature{min-height:420px;background:#0a0a0a;border-radius:12px;padding:32px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 1px 2px rgba(255,255,255,.05),inset 0 1px 0 rgba(255,255,255,.04);transition:background .5s,transform .5s cubic-bezier(.4,0,.2,1)}.feature:hover{background:#1e2c31;transform:translateY(-8px)}.feature-no{font-size:13px;color:var(--cool)}.feature h3{font-size:28px;line-height:1.28;letter-spacing:.42px;font-weight:500;margin:0 0 16px}.feature p{color:var(--z40);margin:0;max-width:340px}.statement{padding:192px var(--pad);background:#000;text-align:center}.statement blockquote{font-size:clamp(48px,6vw,70px);line-height:1;margin:0 auto;max-width:1180px}.statement cite{display:block;margin-top:32px;color:var(--z40);font-size:14px;font-style:normal}.story{padding:128px var(--pad);background:#000}.story-inner{display:grid;grid-template-columns:1fr 1fr;gap:96px;align-items:start}.story h2{font-size:clamp(48px,5vw,70px);line-height:1;margin:0}.story-copy{padding-top:8px}.story-copy p{color:var(--z40);font-size:18px;line-height:1.56;margin:0 0 40px;max-width:600px}.footer{padding:64px var(--pad);background:#000;border-top:1px solid #1e2c31}.footer-inner{width:min(1440px,100%);margin:auto;display:grid;grid-template-columns:2fr repeat(4,1fr);gap:32px}.footer-col strong{display:block;font-size:14px;margin-bottom:20px}.footer-col a{display:block;color:var(--cool);text-decoration:underline;text-underline-offset:3px;margin:10px 0}.legal{width:min(1440px,100%);margin:64px auto 0;padding-top:24px;border-top:1px solid #1e2c31;color:var(--z50);font-size:13px;display:flex;justify-content:space-between}.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s cubic-bezier(.4,0,.2,1)}.reveal.visible{opacity:1;transform:none}.wipe{position:fixed;z-index:100;inset:0;background:#fff;transform-origin:top;animation:wipe 1s cubic-bezier(.4,0,.2,1) forwards}@keyframes wipe{0%{transform:scaleY(1)}100%{transform:scaleY(0)}}@media(max-width:900px){.feature-grid{grid-template-columns:1fr}.feature{min-height:300px}.story-inner{grid-template-columns:1fr;gap:48px}.footer-inner{grid-template-columns:1fr 1fr}.photo{min-height:460px}.hero{padding:calc(var(--bar) + 72px) var(--pad) 96px}.hero-row{align-items:flex-start;flex-direction:column}.intro,.features,.story{padding-top:96px;padding-bottom:96px}.statement{padding:128px var(--pad)}}@media(max-width:600px){.hero{min-height:600px}.hero h1{font-size:56px;letter-spacing:.8px}.lead{font-size:16px}.photo{min-height:430px;height:70vh;border-radius:12px 12px 0 0}.photo img{object-position:64% center}.intro h2,.story h2,.statement blockquote{font-size:48px}.intro .body{font-size:16px;margin-top:48px}.feature-grid{gap:16px}.footer-inner{grid-template-columns:1fr}.legal{gap:16px;flex-direction:column}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.wipe{display:none}.reveal{opacity:1;transform:none;transition:none}.photo img{transform:none;transition:none}.feature{transition:none}}
+.feature{min-height:590px;padding:0;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start}.material{height:330px;overflow:hidden;background:#111;flex:none}.material img{width:100%;height:100%;display:block;object-fit:cover;filter:saturate(.78);transition:transform .7s cubic-bezier(.4,0,.2,1),filter .7s}.feature:hover .material img{transform:scale(1.055);filter:saturate(1)}.feature-copy{min-height:260px;padding:32px;display:flex;flex-direction:column;justify-content:space-between}.feature h3{margin:40px 0 16px}@media(max-width:900px){.feature{min-height:560px}.material{height:310px}.feature-copy{min-height:250px}}@media(max-width:600px){.material{height:280px}}
+
+/* ================================================================
+   HTML FRAMEWORK — шапка, бургер, боковая панель, кнопка «наверх».
+   Геометрия по контракту, палитра подобрана под тёмный сайт.
+   ================================================================ */
+:root{
+  --pad:clamp(20px,5vw,64px);   /* боковые поля от краёв экрана */
+  --bar:58.5px;                 /* контентная высота шапки: 18 + 22,5 + 18 */
+  --bar-bg:#FFFFFF;             /* подложка шапки при прокрутке — всегда белая */
+  --bar-ink:#141110;            /* текст и иконки на белой подложке */
+  --hairline:#DFE0E4;           /* линия под шапкой */
+  --e-bar:cubic-bezier(.22,.61,.36,1);
+  --e:cubic-bezier(.16,1,.3,1);
+
+  --bg:#000000;
+  --bg-2:#0A0A0A;               /* фон боковой панели */
+  --ink:#FFFFFF;
+  --muted:#A1A1AA;
+  --line:#FFFFFF2E;
+  --on-deep:#FFFFFF;
+  --accent:#9DABAD;
+
+  --font-brand:Inter,Helvetica,Arial,sans-serif;
+  --font-sans:var(--font-brand);
+}
+
+/* --- шапка --- */
+.top{position:fixed;inset:0 0 auto;z-index:70;display:flex;align-items:center;gap:16px;
+  padding:18px var(--pad);color:var(--on-deep);
+  border-bottom:1px solid transparent;
+  transition:background .5s var(--e-bar),border-color .5s var(--e-bar),color .5s var(--e-bar)}
+.top.light{color:var(--ink)}
+.top.solid{background:var(--bar-bg);border-bottom-color:var(--hairline);color:var(--bar-ink)}
+
+.brand{display:flex;align-items:center;gap:clamp(7px,.7vw,11px);margin-right:auto;min-width:0}
+.brand__n{font:600 clamp(12px,.94vw,15px)/1 var(--font-brand);letter-spacing:.01em;
+  text-transform:uppercase;white-space:nowrap}
+.brand__x{font:400 clamp(13px,1.05vw,17px)/1 var(--font-sans);opacity:.6;flex:none}
+.brand__l{height:clamp(11px,.85vw,14px);width:auto;aspect-ratio:460/87;flex:none;
+  display:block;fill:currentColor}
+.brand__s{width:1px;height:13px;background:currentColor;opacity:.3;flex:none;
+  margin-inline:clamp(2px,.3vw,5px)}
+.brand__t{font:400 clamp(12px,.9vw,15px)/1 var(--font-sans);opacity:.75;white-space:nowrap}
+
+.top__act{display:flex;align-items:center;gap:clamp(6px,.7vw,12px);flex:none}
+.ibtn{width:34px;height:22.5px;display:grid;place-items:center;padding:0;border:0;flex:none;
+  color:currentColor;opacity:.8;transition:opacity .35s var(--e)}
+.ibtn:hover{opacity:1}
+.ibtn svg{width:19px;height:19px;display:block;fill:none;stroke:currentColor;stroke-width:1}
+
+/* --- бургер --- */
+.burger{width:34px;height:22.5px;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:5px;flex:none;padding:0;border:0}
+.burger i{display:block;width:19px;height:1px;background:currentColor;
+  transition:transform .45s var(--e),opacity .3s var(--e),width .45s var(--e)}
+.burger:hover i:nth-child(2){width:12px}
+body.nav-open .burger i:nth-child(1){transform:translateY(6.2px) rotate(45deg)}
+body.nav-open .burger i:nth-child(2){opacity:0}
+body.nav-open .burger i:nth-child(3){transform:translateY(-6.2px) rotate(-45deg)}
+@media(max-width:560px){.brand__t,.brand__s{display:none}}
+
+/* --- боковая панель --- */
+.scrim{position:fixed;inset:0;z-index:80;background:#0a0908;opacity:0;visibility:hidden;
+  transition:opacity .5s var(--e),visibility .5s}
+body.nav-open{overflow:hidden}
+body.nav-open .scrim{opacity:.55;visibility:visible}
+
+.panel{position:fixed;top:0;right:0;bottom:0;z-index:90;width:min(440px,100%);
+  background:var(--bg-2);color:var(--ink);display:flex;flex-direction:column;
+  padding:clamp(16px,2vw,28px);transform:translateX(102%);
+  transition:transform .62s var(--e);overflow-y:auto}
+body.nav-open .panel{transform:none}
+
+.panel__top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+  margin-bottom:clamp(26px,4vw,48px)}
+.panel__id{display:flex;flex-direction:column;gap:10px;min-width:0}
+.panel__logo{width:24px;height:24px;flex:none;overflow:hidden}
+.panel__logo img{width:100%;height:100%;object-fit:contain}
+.panel__logo.ph{border:1px dashed var(--line);border-radius:3px;display:block;
+  font-size:0;color:transparent}
+.panel__t{font:400 clamp(12px,.9vw,14px)/1.2 var(--font-sans);color:var(--muted)}
+.panel__x{width:34px;height:24px;display:grid;place-items:center;
+  padding:0;border:0;flex:none;opacity:.75;transition:opacity .3s}
+.panel__x svg{width:19px;height:19px;display:block;fill:none;stroke:currentColor;stroke-width:1}
+.panel__x:hover{opacity:1}
+
+.panel__nav{display:flex;flex-direction:column;gap:clamp(6px,1.1vh,13px);margin-bottom:auto}
+.panel__nav a{font-family:var(--font-brand);font-weight:600;letter-spacing:.01em;
+  text-transform:uppercase;font-size:clamp(14px,1.25vw,19px);line-height:1.3;display:block;
+  color:var(--ink);text-decoration:none;
+  transition:color .3s,transform .5s var(--e)}
+.panel__nav a:hover{color:var(--accent);transform:translateX(8px)}
+
+/* --- индикатор прокрутки --- */
+html{scrollbar-width:none}
+html::-webkit-scrollbar{width:0;height:0;display:none}
+.pbar{position:fixed;right:clamp(4px,.45vw,7px);top:calc(var(--bar) + 16px);
+  bottom:clamp(74px,8vh,96px);width:3px;z-index:60;
+  background:transparent;pointer-events:none;
+  color:var(--on-deep);--thumb:clamp(26px,4.4vh,46px);
+  transition:color .45s var(--e)}
+body.tone-light .pbar{color:var(--ink)}
+.pbar i{position:absolute;left:0;right:0;display:block;border-radius:3px;
+  height:var(--thumb);top:calc(var(--p,0) * (100% - var(--thumb)));
+  background:currentColor;opacity:.42}
+@media(max-width:700px){.pbar{display:none}}
+
+/* --- кнопка «наверх» --- */
+.up{position:fixed;right:clamp(14px,1.8vw,26px);bottom:clamp(14px,1.8vw,26px);z-index:65;
+  width:clamp(42px,3.4vw,50px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;
+  padding:0;border:0;color:var(--bar-ink);
+  background:var(--bar-bg);
+  opacity:0;visibility:hidden;transform:translateY(10px);
+  transition:opacity .45s var(--e),transform .45s var(--e),visibility .45s}
+.up.on{opacity:1;visibility:visible;transform:none}
+.up svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1;display:block}
+
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+</style>
+</head>
+<body>
+<div class="wipe" aria-hidden="true"></div>
+
+<header class="top">
+  <a class="brand" href="#top">
+    <span class="brand__n">ФОРМА</span>
+    <span class="brand__x">✕</span>
+    <svg class="brand__l" viewBox="0 0 460 87" role="img" aria-label="KRUGOZOR Group"><g transform="translate(0,87) scale(0.05,-0.05)" fill="currentColor"><path d="M5066 1505 c-20 -14 -39 -25 -42 -25 -65 0 -394 -326 -491 -485 -85
+-140 -84 -134 -43 -198 17 -26 30 -50 30 -52 0 -3 17 -29 37 -58 136 -195 320
+-364 517 -477 59 -33 59 -33 122 0 245 128 604 514 604 649 0 98 -256 414
+-448 551 -172 124 -220 140 -286 95z m144 -172 c140 -93 239 -187 343 -325
+106 -141 105 -136 58 -214 -101 -169 -491 -522 -491 -445 0 5 -8 12 -18 15
+-93 30 -402 338 -454 452 -6 13 -15 24 -20 24 -4 0 -8 9 -8 20 0 11 5 20 10
+20 6 0 10 6 10 13 0 45 228 297 351 389 143 106 139 105 219 51z M7434 1485
+c-547 -85 -746 -740 -339 -1117 37 -34 111 -88 120 -88 2 0 30 -12 61 -26 236
+-108 554 -33 730 171 338 391 103 997 -411 1061 -27 3 -57 7 -65 9 -8 1 -51
+-3 -96 -10z m226 -156 c367 -112 481 -567 210 -837 -234 -233 -649 -163 -794
+133 -28 55 -34 80 -52 188 -52 311 320 612 636 516z M3690 1466 c-182 -34
+-340 -188 -380 -370 -7 -28 -16 -67 -21 -87 -12 -47 -12 -231 0 -278 5 -20 14
+-58 20 -86 91 -404 721 -528 902 -177 8 15 16 29 19 32 12 11 30 63 30 85 0
+13 5 27 10 30 6 4 10 58 10 131 l0 124 -220 0 -220 0 0 -65 c0 -64 0 -64 153
+-67 170 -3 180 -15 121 -145 -135 -294 -580 -243 -664 77 -7 25 -16 53 -21 62
+-12 23 -12 253 0 276 5 9 16 42 25 73 89 309 510 352 649 67 28 -58 28 -58
+103 -58 71 0 98 14 64 35 -5 3 -10 16 -10 28 -1 67 -169 267 -224 267 -4 0
+-25 9 -49 20 -80 37 -187 46 -297 26z M140 870 l0 -590 70 0 70 0 0 188 c0
+187 0 187 71 267 88 100 76 99 140 13 96 -131 254 -343 266 -358 6 -8 27 -35
+45 -60 34 -45 34 -45 116 -48 104 -4 106 -14 -46 185 -140 184 -192 253 -225
+297 -12 16 -43 56 -69 89 -56 70 -57 75 -20 114 15 16 79 85 142 153 63 68
+145 156 181 195 77 80 119 130 119 139 0 24 -178 5 -200 -21 -13 -16 -46 -53
+-74 -83 -62 -68 -128 -140 -181 -200 -22 -25 -80 -90 -130 -144 -49 -54 -94
+-104 -98 -112 -32 -56 -37 -17 -37 276 l0 290 -70 0 -70 0 0 -590z M1152 873
+l3 -588 67 -3 68 -3 2 228 3 228 140 2 c157 3 151 5 183 -57 13 -25 53 -101
+89 -170 37 -69 79 -149 94 -178 44 -86 43 -85 105 -54 66 33 66 40 10 145
+-186 349 -179 317 -66 317 l90 0 0 360 0 360 -395 0 -395 0 2 -587z m646 224
+l2 -217 -252 2 -253 3 -3 205 c-1 112 0 210 3 217 3 11 57 13 252 11 l248 -3
+3 -218z M2174 1446 c-18 -46 3 -862 23 -912 148 -371 777 -366 871 6 31 122
+33 164 30 535 l-3 380 -72 3 -72 3 -3 -428 c-4 -428 -4 -428 -30 -479 -108
+-209 -462 -212 -565 -5 -28 56 -28 56 -33 481 l-5 425 -68 3 c-52 2 -69 0 -73
+-12z M5930 1395 l0 -65 310 0 c240 0 310 -3 310 -12 0 -14 -129 -211 -142
+-216 -4 -2 -8 -8 -8 -13 0 -11 -181 -283 -192 -287 -4 -2 -8 -8 -8 -13 0 -7
+-167 -262 -192 -294 -50 -62 -68 -103 -68 -158 l0 -57 403 2 c402 3 402 3 405
+42 8 92 32 86 -318 86 -193 0 -310 4 -310 10 0 5 46 77 103 160 56 83 107 159
+112 168 6 10 28 44 50 76 22 32 49 72 60 90 11 18 37 56 58 84 20 29 37 55 37
+60 0 4 10 19 23 34 12 14 30 39 39 55 9 15 44 68 77 117 56 82 61 94 61 143 0
+53 0 53 -405 53 l-405 0 0 -65z M8380 870 l0 -590 70 0 70 0 2 227 3 228 142
+3 c141 3 141 3 161 -30 17 -30 72 -133 196 -370 47 -90 57 -94 130 -48 34 22
+45 34 38 43 -8 11 -47 84 -172 324 -45 87 -48 83 62 83 l88 0 -2 358 -3 357
+-392 3 -393 2 0 -590z m640 230 l0 -220 -250 0 -250 0 0 213 c0 118 3 217 7
+220 3 4 116 7 250 7 l243 0 0 -220z"/></g></svg>
+    <span class="brand__s"></span>
+    <span class="brand__t">Мастерские и вещи с историей</span>
+  </a>
+
+  <div class="top__act">
+    <button class="ibtn" data-act="full" aria-label="На весь экран">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 5.5v-4h4M14.5 5.5v-4h-4M1.5 10.5v4h4M14.5 10.5v4h-4"/></svg>
+    </button>
+    <button class="burger" aria-label="Меню" aria-expanded="false">
+      <i></i><i></i><i></i>
+    </button>
+  </div>
+</header>
+
+<div class="scrim"></div>
+
+<aside class="panel" aria-hidden="true">
+  <div class="panel__top">
+    <div class="panel__id">
+      <span class="panel__logo ph"></span>
+      <span class="panel__t">Мастерские и вещи с историей</span>
+    </div>
+    <button class="panel__x" aria-label="Закрыть">
+      <svg viewBox="0 0 19 19" aria-hidden="true"><path d="M2 2l15 15M17 2L2 17"/></svg>
+    </button>
+  </div>
+
+  <nav class="panel__nav">
+    <a href="#makers">Мастера</a>
+    <a href="#principles">Принципы</a>
+    <a href="#story">О проекте</a>
+  </nav>
+</aside>
+
+<div class="pbar" aria-hidden="true"><i></i></div>
+
+<button class="up" aria-label="Наверх">
+  <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 13.5V2.5M3.5 7L8 2.5 12.5 7"/></svg>
+</button>
+
+<main>
+<section class="hero" id="top" data-tone="deep"><div class="hero-inner">
+<p class="eyebrow reveal">Независимые мастерские · Москва / Тбилиси / Ереван</p>
+<h1 class="display reveal">Вещи, в которых<br>остаётся рука автора.</h1>
+<div class="hero-row reveal"><p class="lead">Платформа предметного дизайна, где каждая работа создаётся небольшим тиражом и остаётся личной.</p><a href="#makers" class="pill outline">Познакомиться с мастерами</a></div>
+</div></section>
+<section class="photo" data-tone="deep" aria-label="Керамист за работой"><img src="https://ymoiseenkova92-art.github.io/Internship/form-atelier-hero.png" alt="Мастер работает над большой керамической вазой в современной студии"></section>
+<section class="intro" id="makers" data-tone="deep"><div class="intro-inner"><p class="eyebrow reveal">Люди важнее тиража</p><h2 class="display reveal">Мы соединяем мастерские и тех, кто ищет предметы с настоящей историей.</h2><p class="body reveal">Каждую коллекцию мы отбираем вместе с автором: без обезличенного производства, бесконечных остатков и случайного ассортимента. Только материалы, процессы и вещи, которым нужно время.</p></div></section>
+<section class="features" id="principles" data-tone="deep"><div class="features-inner"><p class="eyebrow reveal">Наши принципы</p><div class="feature-grid">
+<article class="feature reveal"><div class="material"><img src="https://ymoiseenkova92-art.github.io/Internship/material-concrete.png" alt="Фактура состаренного литого бетона"></div><div class="feature-copy"><span class="feature-no">01 / Бетон</span><div><h3 class="display">След формы</h3><p>Поры, минеральные включения и линии отливки остаются частью каждого предмета.</p></div></div></article>
+<article class="feature reveal"><div class="material"><img src="https://ymoiseenkova92-art.github.io/Internship/material-wood.png" alt="Фактура старого массива ореха со следами ручного инструмента"></div><div class="feature-copy"><span class="feature-no">02 / Дерево</span><div><h3 class="display">Память волокон</h3><p>Рисунок, царапины и тёмная патина показывают возраст материала, а не скрывают его.</p></div></div></article>
+<article class="feature reveal"><div class="material"><img src="https://ymoiseenkova92-art.github.io/Internship/material-tile.png" alt="Фактура керамической плитки ручной работы"></div><div class="feature-copy"><span class="feature-no">03 / Плитка</span><div><h3 class="display">Живая поверхность</h3><p>Неровные края и различия глазури сохраняют температуру обжига и движение руки.</p></div></div></article>
+</div></div></section>
+<section class="statement" data-tone="deep"><blockquote class="display reveal">«Дом становится личным, когда в нём есть вещи, выбранные не спеша».</blockquote><cite class="reveal">Редакция ФОРМА</cite></section>
+<section class="story" id="story" data-tone="deep"><div class="story-inner"><h2 class="display reveal">Не магазин.<br>Место встречи.</h2><div class="story-copy reveal"><p>Мы рассказываем о мастерских, показываем процессы и собираем ограниченные выпуски. Покупка здесь — продолжение знакомства с автором, а не финальная точка.</p><a href="#top" class="pill outline">Вернуться к началу</a></div></div></section>
+</main>
+<footer class="footer" data-tone="deep"><div class="footer-inner"><div class="footer-col"><a href="#top" class="foot-brand">ФОРМА</a></div><div class="footer-col"><strong>Коллекции</strong><a href="#makers">Керамика</a><a href="#makers">Стекло</a><a href="#makers">Дерево</a></div><div class="footer-col"><strong>Мастерам</strong><a href="#story">Стать участником</a><a href="#story">Условия</a></div><div class="footer-col"><strong>Помощь</strong><a href="#story">Доставка</a><a href="#story">Контакты</a></div><div class="footer-col"><strong>Следите</strong><a href="#story">Telegram</a><a href="#story">Instagram</a></div></div><div class="legal"><span>© 2026 ФОРМА</span><span>Предметы с известным происхождением</span></div></footer>
+
+<script>
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reveals=[...document.querySelectorAll('.reveal')];
+if(!reduced){const io=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){const peers=[...e.target.parentElement.querySelectorAll('.reveal')];e.target.style.transitionDelay=Math.max(0,peers.indexOf(e.target))*80+'ms';e.target.classList.add('visible');io.unobserve(e.target)}}),{threshold:.16});reveals.forEach(el=>io.observe(el))}else reveals.forEach(el=>el.classList.add('visible'));
+const photo=document.querySelector('.photo'),img=photo.querySelector('img');img.addEventListener('load',()=>photo.classList.add('loaded'));if(img.complete)photo.classList.add('loaded');
+if(!reduced){addEventListener('scroll',()=>{const r=photo.getBoundingClientRect(),p=Math.max(-1,Math.min(1,(innerHeight/2-(r.top+r.height/2))/innerHeight));img.style.translate='0 '+p*22+'px'},{passive:true});photo.addEventListener('pointermove',e=>{const r=photo.getBoundingClientRect();img.style.transform='scale(1.015) translate('+((e.clientX-r.left)/r.width-.5)*8+'px,'+((e.clientY-r.top)/r.height-.5)*8+'px)' });photo.addEventListener('pointerleave',()=>img.style.transform='scale(1)')}
+</script>
+
+<!-- ===== HTML FRAMEWORK: поведение шапки, панели и кнопки «наверх» ===== -->
+<script>
+(function () {
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var top = document.querySelector(".top");
+  var panel = document.querySelector(".panel");
+  var scrim = document.querySelector(".scrim");
+  var burger = top.querySelector(".burger");
+  var upBtn = document.querySelector(".up");
+  var pbar = document.querySelector(".pbar");
+  var fullBtn = top.querySelector('[data-act="full"]');
+  var toned = [].slice.call(document.querySelectorAll("[data-tone]"));
+
+  /* --- панель --- */
+  function closePanel() {
+    document.body.classList.remove("nav-open");
+    burger.setAttribute("aria-expanded", "false");
+    panel.setAttribute("aria-hidden", "true");
+  }
+  burger.addEventListener("click", function () {
+    var o = document.body.classList.toggle("nav-open");
+    this.setAttribute("aria-expanded", o ? "true" : "false");
+    panel.setAttribute("aria-hidden", o ? "false" : "true");
+  });
+  panel.querySelector(".panel__x").addEventListener("click", closePanel);
+  scrim.addEventListener("click", closePanel);
+  addEventListener("keydown", function (e) { if (e.key === "Escape") closePanel(); });
+
+  /* --- «наверх» --- */
+  upBtn.addEventListener("click", function () {
+    closePanel();
+    scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+  });
+
+  /* --- широкоформатный режим --- */
+  var ICON_ON = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 5.5v-4h4M14.5 5.5v-4h-4M1.5 10.5v4h4M14.5 10.5v4h-4"/></svg>';
+  var ICON_OFF = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 1.5v4h-4M10.5 1.5v4h4M5.5 14.5v-4h-4M10.5 14.5v-4h4"/></svg>';
+  fullBtn.addEventListener("click", function () {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+  });
+  function fsSync() {
+    var on = !!document.fullscreenElement;
+    fullBtn.innerHTML = on ? ICON_OFF : ICON_ON;
+    fullBtn.setAttribute("aria-label", on ? "Выключить" : "На весь экран");
+  }
+  document.addEventListener("fullscreenchange", fsSync);
+  fsSync();
+
+  /* --- плавный переход по якорям, панель закрывается --- */
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      var t = document.querySelector(a.getAttribute("href"));
+      if (!t) return;
+      e.preventDefault();
+      closePanel();
+      scrollTo({ top: t.getBoundingClientRect().top + scrollY, behavior: reduce ? "auto" : "smooth" });
+    });
+  });
+
+  /* --- прокрутка: индикатор, тон шапки, подложка, кнопка «наверх» --- */
+  var raf = 0;
+  function frame() {
+    raf = 0;
+    var vh = innerHeight, doc = document.documentElement;
+
+    pbar.style.setProperty("--p", (scrollY / Math.max(1, doc.scrollHeight - vh)).toFixed(4));
+
+    var lightTone = false;
+    for (var i = toned.length - 1; i >= 0; i--) {
+      var r = toned[i].getBoundingClientRect();
+      if (r.top <= 30 && r.bottom > 30) {
+        lightTone = toned[i].dataset.tone === "light";
+        break;
+      }
+    }
+    top.classList.toggle("light", lightTone);
+    document.body.classList.toggle("tone-light", lightTone);
+    top.classList.toggle("solid", scrollY > 8);
+    upBtn.classList.toggle("on", scrollY > vh * .8);
+  }
+  function onScroll() { if (!raf) raf = requestAnimationFrame(frame); }
+  addEventListener("scroll", onScroll, { passive: true });
+  addEventListener("resize", onScroll);
+  frame();
+})();
+</script>
+</body>
+</html>
