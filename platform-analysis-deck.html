@@ -1,0 +1,240 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Анализ платформ для создания HTML-лендингов</title><style>
+    :root{--line:rgba(255,255,255,.18);--violet:#b69aff;--glass:rgba(255,255,255,.075)}
+    *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#030304;color:#fff;font-family:Montserrat,Arial,sans-serif}button,a{font:inherit}.deck{position:relative;width:1920px;height:1080px;overflow:hidden;background:radial-gradient(circle at 70% 30%,rgba(143,71,174,.32),transparent 23%),radial-gradient(circle at 17% 78%,rgba(75,75,160,.28),transparent 27%),linear-gradient(125deg,#020204,#100b18 62%,#020203)}
+    .deck:after{content:"";position:fixed;inset:0;pointer-events:none;opacity:.13;background-image:radial-gradient(rgba(255,255,255,.28) 0.8px,transparent 1.06667px);background-size:24px 24px}.chrome,.controls{position:fixed;z-index:20;left:29.3333px;right:29.3333px;border:1.33333px solid var(--line);border-radius:21.3333px;background:rgba(0,0,0,.56);backdrop-filter:blur(32px)}
+    .chrome{top:21.3333px;height:69.3333px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 24px;font-size:13.3333px;letter-spacing:.18em}.brand{display:flex;gap:10.6667px;align-items:center}.brand i{width:8px;height:8px;border-radius:50%;background:#a180ff;box-shadow:0 0 21.3333px #8f47ae}.chapter{text-transform:uppercase;color:#d8d4df}.counter{text-align:right;color:#aaa6b3}
+    .track{position:absolute;z-index:3;inset:0 auto 0 0;height:100%;display:flex;transition:transform .72s cubic-bezier(.22,.8,.2,1)}.slide{position:relative;flex:0 0 1920px;width:1920px;height:1080px;padding:117.333px 96px 114.667px;overflow:hidden}.slide:before{content:"";position:absolute;inset:104px 24px 96px;border:1.33333px solid rgba(255,255,255,.09);border-radius:42.6667px;pointer-events:none}.micro{font-size:13.3333px;letter-spacing:.2em;text-transform:uppercase;color:#c0bac8}
+    .cover{display:grid;grid-template-columns:1.25fr .75fr;grid-template-rows:auto 1fr auto;gap:32px}.cover>.micro{grid-column:1/-1}.cover-copy{align-self:center}.cover-copy>p{max-width:626.667px;font-size:17.3333px;line-height:1.65;letter-spacing:.08em;text-transform:uppercase;color:#b9b5c0}.nowrap{white-space:nowrap}.cover h1{margin:29.3333px 0 0;font-size:clamp(58.6667px,115.2px,122.667px);line-height:.92;letter-spacing:-.045em;font-weight:400;text-transform:uppercase}.cover h1 span{color:#c2a7ff}.cover-list{align-self:center;border-top:1.33333px solid var(--line)}.cover-list button{width:100%;display:grid;grid-template-columns:61.3333px 1fr auto;align-items:center;border:0;border-bottom:1.33333px solid var(--line);padding:21.3333px 16px;background:transparent;color:#fff;text-align:left;cursor:pointer}.cover-list b{color:#a48aff;font-size:14.6667px}.cover-list span{font-size:24px}.focus{grid-column:1/-1;display:flex;gap:37.3333px;border-top:1.33333px solid var(--line);padding-top:21.3333px}.focus small{letter-spacing:.2em;color:#9e99a4}.focus code{color:#c2a7ff}
+    .platform{display:grid;grid-template-columns:44% 56%;align-items:center}.slide-no{position:absolute;top:120px;right:115.2px;font-size:clamp(133.333px,288px,293.333px);line-height:.8;color:rgba(255,255,255,.035)}.platform-main{position:relative;padding:0 96px 0 38.4px}.platform h2{margin:21.3333px 0 32px;font-size:clamp(64px,99.84px,109.333px);line-height:.9;letter-spacing:-.045em;text-transform:uppercase;font-weight:400}.lead{max-width:760px;color:#dedbe2;font-size:clamp(20px,24px,25.3333px);line-height:1.6}.tags,.formats{display:flex;flex-wrap:wrap;gap:9.33333px}.tags{margin:37.3333px 0}.tags span,.formats span{font-size:12px;letter-spacing:.13em;border:1.33333px solid rgba(255,255,255,.24);border-radius:1332px;padding:10.6667px 14.6667px;background:rgba(0,0,0,.28)}.platform-main a{display:inline-flex;color:#fff;text-decoration:none;font-size:13.3333px;letter-spacing:.16em;border-bottom:1.33333px solid #fff;padding-bottom:6.66667px}
+    .panels{display:grid;grid-template-columns:1fr 1fr;gap:10.6667px;padding-right:38.4px}.panels article{min-height:273.333px;border:1.33333px solid rgba(255,255,255,.15);border-radius:21.3333px;padding:29.3333px;background:var(--glass);backdrop-filter:blur(26.6667px)}.panels h3{margin:0 0 24px;font-size:13.3333px;letter-spacing:.17em;text-transform:uppercase;color:#c9c4ce;font-weight:400}.panels ul{list-style:none;margin:0;padding:0}.panels li{padding:9.33333px 0;border-bottom:1.33333px solid rgba(255,255,255,.08);font-size:17.3333px}.panels li:before{content:"↗";margin-right:10.6667px;color:var(--violet)}.access strong{display:block;font-size:20px;line-height:1.45;font-weight:500}.access p,.takeaway p{font-size:16px;line-height:1.55;color:#bcb7c1}.takeaway{display:grid;grid-template-columns:120px 1fr;gap:24px}.rating{font-size:60px;color:#c2a7ff}.rating small{font-size:14.6667px;color:#a6a0ac}
+    .compare{display:flex;flex-direction:column;justify-content:center;padding-left:115.2px;padding-right:115.2px}.compare>.micro{margin-bottom:26.6667px}.compare-head{display:flex;justify-content:space-between;align-items:end;margin:21.6px 0 clamp(42.6667px,54px,69.3333px)}.compare h2{margin:0;font-size:clamp(77.3333px,153.6px,157.333px);line-height:.86;letter-spacing:-.05em;text-transform:uppercase;font-weight:400}.compare-head p{max-width:693.333px;margin:0;color:#c5c0ca;font-size:17.3333px;line-height:1.55}.matrix{border:1.33333px solid var(--line);border-radius:21.3333px;overflow:hidden;background:rgba(0,0,0,.32)}.row{display:grid;grid-template-columns:1.25fr repeat(4,1fr);border-bottom:1.33333px solid var(--line)}.row:last-child{border:0}.row span{min-height:66.6667px;padding:13.3333px 18.6667px;border-right:1.33333px solid var(--line);display:flex;align-items:center;gap:9.33333px;font-size:14.6667px}.row span:last-child{border:0}.head span{display:block;color:#aaa4af;font-size:12px;letter-spacing:.11em}.head b{display:block;color:#b49bf0;margin-bottom:5.33333px}.fine{display:flex;gap:37.3333px;margin-top:18.6667px;color:#99939f;font-size:12px}
+    .result{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}.result:after{content:"";position:absolute;z-index:-1;width:min(1190.4px,1226.67px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(143,71,174,.26),transparent 64%)}.result-number{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);font-size:clamp(346.667px,672px,746.667px);line-height:.75;letter-spacing:-.12em;color:rgba(255,255,255,.025)}.verdict{position:relative;z-index:1;max-width:1386.67px}.kicker{display:inline-block;margin-bottom:32px;padding:10.6667px 18.6667px;border:1.33333px solid rgba(194,167,255,.34);border-radius:1332px;background:rgba(164,138,255,.1);color:#cab8f5;font-size:12px;letter-spacing:.18em}.result-label{margin:0 0 16px;color:#c8c2ce;font-size:17.3333px;letter-spacing:.18em;text-transform:uppercase}.verdict h2{margin:0;font-size:clamp(109.333px,230.4px,245.333px);line-height:.82;letter-spacing:-.065em;text-transform:uppercase;font-weight:400;background:linear-gradient(90deg,#fff 24%,#c0a4ff 72%,#fff);background-clip:text;color:transparent}.summary{max-width:1040px;margin:37.3333px auto 29.3333px;color:#d5d0d9;font-size:20px;line-height:1.65}.proof{display:flex;justify-content:center;flex-wrap:wrap;gap:10.6667px}.proof span{padding:10.6667px 16px;border:1.33333px solid rgba(255,255,255,.2);border-radius:1332px;background:rgba(0,0,0,.32);font-size:12px;letter-spacing:.1em;text-transform:uppercase}.alternatives{position:relative;z-index:1;width:min(1466.67px,1651.2px);margin-top:72px;padding-top:24px;border-top:1.33333px solid var(--line);text-align:left}.alternatives>p{margin:0 0 18.6667px;color:#96909c;font-size:12px;letter-spacing:.18em;text-transform:uppercase}.alternatives>div{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}.alternatives article{display:grid;grid-template-columns:45.3333px auto 1fr;gap:13.3333px;align-items:baseline}.alternatives span{color:#a48aff;font-size:13.3333px}.alternatives b{font-size:18.6667px}.alternatives em{color:#938d99;font-size:13.3333px;font-style:normal}
+    .controls{bottom:21.3333px;height:61.3333px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 10.6667px 0 24px}.dots{display:flex;gap:9.33333px}.dots button{width:29.3333px;height:4px;border:0;border-radius:132px;padding:0;background:#4b4651;cursor:pointer}.dots button.active{width:64px;background:#b096ee}.hint{font-size:10.6667px;letter-spacing:.18em;color:#8e8893}.arrows{justify-self:end;display:flex;gap:6.66667px}.arrows button{width:45.3333px;height:45.3333px;border:1.33333px solid rgba(255,255,255,.15);border-radius:50%;background:#0c0b0e;color:#fff;cursor:pointer}.arrows button:disabled{opacity:.28}
+    :root {--design-w:1920px;--design-h:1080px;--aspect-ratio:16/9;--safe:58px;--browser-stage-padding-x:20px;--browser-stage-padding-y:20px;--frame-controls-gap:18px;--muted:#aaa4b4;}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#000}
+.stage{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:18px;overflow:hidden;background:#000;touch-action:pan-y}
+.presentation-frame{position:relative;width:1920px;height:1080px;flex:none}
+.canvas{position:absolute;inset:0;width:1920px;height:1080px;aspect-ratio:16/9;transform-origin:top left;overflow:hidden}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;flex:none;width:100%;height:100%;padding:58px;overflow:hidden;opacity:0;visibility:hidden;pointer-events:none;transition:opacity 220ms ease;background:radial-gradient(circle at 70% 30%,rgba(143,71,174,.32),transparent 23%),radial-gradient(circle at 17% 78%,rgba(75,75,160,.28),transparent 27%),linear-gradient(125deg,#020204,#100b18 62%,#020203)}
+.slide:before{inset:35px;border-radius:32px;border:1px solid rgba(255,255,255,.09)}
+.slide:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.13;background-image:radial-gradient(rgba(255,255,255,.28) .6px,transparent .8px);background-size:18px 18px}
+.slide.is-active{opacity:1;visibility:visible;pointer-events:auto}
+.slide>.topline,.slide>.slide-body,.slide>.footer{position:relative;z-index:1}
+.topline,.footer{display:flex;align-items:center;justify-content:space-between;flex:0 0 auto;color:#aaa4b4;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:400;line-height:1}
+.topline{height:15px;min-height:15px;letter-spacing:.02em}.topline .mark{font-weight:400;letter-spacing:normal}
+.footer{height:45px;min-height:45px;margin-top:auto;padding-top:30px}.footer .page-no{font-size:15px;font-variant-numeric:tabular-nums}
+.slide-body{width:1804px;max-width:100%;flex:1 1 auto;min-width:0;min-height:0;overflow:hidden}
+.slide-body.cover{padding:36px 24px 12px;grid-template-columns:1.25fr .75fr;gap:28px}
+.cover h1{font-size:98px;line-height:.94}.cover-copy>p{max-width:620px;font-size:18px}
+.cover-list span{font-size:26px}.cover-list button{min-height:72px}.focus{font-size:21px}.focus small{font-size:15px}
+.slide-body.platform{padding:0 24px;grid-template-columns:44% 56%}
+.platform-main{padding:0 70px 0 20px}.platform h2{font-size:100px}.lead{font-size:23px;max-width:650px}.tags span,.formats span{font-size:13px}
+.panels{padding-right:0;gap:12px}.panels article{min-height:290px;padding:28px}.panels h3{font-size:14px}.panels li{font-size:18px}.access strong{font-size:20px}.access p,.takeaway p{font-size:17px}.takeaway{grid-template-columns:90px 1fr;gap:20px}.rating{font-size:60px}.rating small{font-size:15px}
+.slide-no{top:105px;right:80px;font-size:280px;pointer-events:none}
+.slide-body.compare{padding:0 32px}.compare-head{gap:50px;margin:24px 0 48px}.compare h2{font-size:126px}.compare-head p{font-size:19px;max-width:630px}.row span{font-size:17px;min-height:68px;padding:12px 18px}.head span{font-size:14px}.fine{font-size:13px;line-height:1.4}
+.slide-body.result{padding:20px 30px}.result:after{display:none}.verdict{max-width:1560px}.verdict h2{font-size:204px}.summary{font-size:21px;max-width:1100px}.result-label{font-size:18px}.kicker,.proof span{font-size:13px}.alternatives{width:1520px;max-width:100%;margin-top:58px}.alternatives>p{font-size:13px}.alternatives b{font-size:21px}.alternatives em{font-size:15px}.alternatives span{font-size:14px}.result-number{font-size:690px;pointer-events:none}
+.controls{position:relative;left:auto;right:auto;bottom:auto;z-index:20;display:flex;align-items:center;justify-content:center;width:100%;height:auto;min-height:40px;padding:0;border:0;border-radius:0;background:none;backdrop-filter:none;color:#fff;font:14px Arial,sans-serif}
+.nav-group{display:flex;align-items:center;gap:6px;padding:6px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(24,20,30,.94);backdrop-filter:blur(14px)}
+.nav-group button{width:30px;height:26px;padding:0;border:0;border-radius:999px;background:transparent;color:#f5f5f2;font-size:18px;font-weight:400;line-height:1;cursor:pointer}.nav-group button:hover{background:#ffffff18}.nav-group .restart{font-size:14px}.nav-group .count{min-width:60px;text-align:center;font-variant-numeric:tabular-nums}.control-divider{width:1px;height:18px;margin:0 3px;background:#ffffff29}button:disabled{opacity:.35;cursor:default}button:focus-visible,a:focus-visible{outline:2px solid #c2a7ff;outline-offset:3px}
+.mobile-slide{display:none}.rotate-prompt[hidden]{display:none!important}.rotate-prompt{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:32px;text-align:center;color:#fff;background:#100b18;font-size:22px;line-height:1.4}
+@media print {
+ @page{size:1920px 1080px;margin:0}
+ html,body{width:1920px;height:auto;overflow:visible;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+ .stage{position:static;display:block;width:1920px!important;height:auto!important;padding:0;overflow:visible}
+ .presentation-frame{width:1920px!important;height:auto!important}
+ .canvas{position:relative;width:1920px!important;height:auto!important;transform:none!important;overflow:visible}
+ .slide{position:relative;width:1920px;height:1080px;opacity:1;visibility:visible;break-after:page}
+ .mobile-slide,.controls,.rotate-prompt{display:none!important}
+}
+:root {--design-w:1920px;--design-h:1080px;--aspect-ratio:16/9;--safe:58px;--browser-stage-padding-x:20px;--browser-stage-padding-y:20px;--frame-controls-gap:18px;--muted:#aaa4b4;}
+html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#000}
+.stage{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;gap:18px;overflow:hidden;background:#000;touch-action:pan-y}
+.presentation-frame{position:relative;width:1920px;height:1080px;flex:none}
+.canvas{position:absolute;inset:0;width:1920px;height:1080px;aspect-ratio:16/9;transform-origin:top left;overflow:hidden}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;flex:none;width:100%;height:100%;padding:58px;overflow:hidden;opacity:0;visibility:hidden;pointer-events:none;transition:opacity 220ms ease;background:radial-gradient(circle at 70% 30%,rgba(143,71,174,.32),transparent 23%),radial-gradient(circle at 17% 78%,rgba(75,75,160,.28),transparent 27%),linear-gradient(125deg,#020204,#100b18 62%,#020203)}
+.slide:before{inset:35px;border-radius:32px;border:1px solid rgba(255,255,255,.09)}
+.slide:after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.13;background-image:radial-gradient(rgba(255,255,255,.28) .6px,transparent .8px);background-size:18px 18px}
+.slide.is-active{opacity:1;visibility:visible;pointer-events:auto}
+.slide>.topline,.slide>.slide-body,.slide>.footer{position:relative;z-index:1}
+.topline,.footer{display:flex;align-items:center;justify-content:space-between;flex:0 0 auto;color:#aaa4b4;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:400;line-height:1}
+.topline{height:15px;min-height:15px;letter-spacing:.02em}.topline .mark{font-weight:400;letter-spacing:normal}
+.footer{height:45px;min-height:45px;margin-top:auto;padding-top:30px}.footer .page-no{font-size:15px;font-variant-numeric:tabular-nums}
+.slide-body{width:1804px;max-width:100%;flex:1 1 auto;min-width:0;min-height:0;overflow:hidden}
+.slide-body.cover{padding:36px 24px 12px;grid-template-columns:1.25fr .75fr;gap:28px}
+.cover h1{font-size:98px;line-height:.94}.cover-copy>p{max-width:620px;font-size:18px}
+.cover-list span{font-size:26px}.cover-list button{min-height:72px}.focus{font-size:21px}.focus small{font-size:15px}
+.slide-body.platform{padding:0 24px;grid-template-columns:44% 56%}
+.platform-main{padding:0 70px 0 20px}.platform h2{font-size:100px}.lead{font-size:23px;max-width:650px}.tags span,.formats span{font-size:13px}
+.panels{padding-right:0;gap:12px}.panels article{min-height:290px;padding:28px}.panels h3{font-size:14px}.panels li{font-size:18px}.access strong{font-size:20px}.access p,.takeaway p{font-size:17px}.takeaway{grid-template-columns:90px 1fr;gap:20px}.rating{font-size:60px}.rating small{font-size:15px}
+.slide-no{top:105px;right:80px;font-size:280px;pointer-events:none}
+.slide-body.compare{padding:0 32px}.compare-head{gap:50px;margin:24px 0 48px}.compare h2{font-size:126px}.compare-head p{font-size:19px;max-width:630px}.row span{font-size:17px;min-height:68px;padding:12px 18px}.head span{font-size:14px}.fine{font-size:13px;line-height:1.4}
+.slide-body.result{padding:20px 30px}.result:after{display:none}.verdict{max-width:1560px}.verdict h2{font-size:204px}.summary{font-size:21px;max-width:1100px}.result-label{font-size:18px}.kicker,.proof span{font-size:13px}.alternatives{width:1520px;max-width:100%;margin-top:58px}.alternatives>p{font-size:13px}.alternatives b{font-size:21px}.alternatives em{font-size:15px}.alternatives span{font-size:14px}.result-number{font-size:690px;pointer-events:none}
+.controls{position:relative;left:auto;right:auto;bottom:auto;z-index:20;display:flex;align-items:center;justify-content:center;width:100%;height:auto;min-height:40px;padding:0;border:0;border-radius:0;background:none;backdrop-filter:none;color:#fff;font:14px Arial,sans-serif}
+.nav-group{display:flex;align-items:center;gap:6px;padding:6px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(24,20,30,.94);backdrop-filter:blur(14px)}
+.nav-group button{width:30px;height:26px;padding:0;border:0;border-radius:999px;background:transparent;color:#f5f5f2;font-size:18px;font-weight:400;line-height:1;cursor:pointer}.nav-group button:hover{background:#ffffff18}.nav-group .restart{font-size:14px}.nav-group .count{min-width:60px;text-align:center;font-variant-numeric:tabular-nums}.control-divider{width:1px;height:18px;margin:0 3px;background:#ffffff29}button:disabled{opacity:.35;cursor:default}button:focus-visible,a:focus-visible{outline:2px solid #c2a7ff;outline-offset:3px}
+.mobile-slide{display:none}.rotate-prompt[hidden]{display:none!important}.rotate-prompt{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:32px;text-align:center;color:#fff;background:#100b18;font-size:22px;line-height:1.4}
+@media print {
+ @page{size:1920px 1080px;margin:0}
+ html,body{width:1920px;height:auto;overflow:visible;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+ .stage{position:static;display:block;width:1920px!important;height:auto!important;padding:0;overflow:visible}
+ .presentation-frame{width:1920px!important;height:auto!important}
+ .canvas{position:relative;width:1920px!important;height:auto!important;transform:none!important;overflow:visible}
+ .slide{position:relative;width:1920px;height:1080px;opacity:1;visibility:visible;break-after:page}
+ .mobile-slide,.controls,.rotate-prompt{display:none!important}
+}@media screen {
+ html[data-viewport="tablet"] .stage{padding:16px}html[data-viewport="tablet"] .nav-group button{width:44px;height:44px}
+ html[data-viewport="mobile"] .stage{padding:0;gap:0}
+ html[data-viewport="mobile"] .slide{padding:max(10px,env(safe-area-inset-top)) calc(72px + env(safe-area-inset-right)) max(10px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+ html[data-viewport="mobile"] .slide:before{display:none}
+ html[data-viewport="mobile"] .topline{font-size:10px;height:12px;min-height:12px}
+ html[data-viewport="mobile"] .footer{font-size:10px;height:18px;min-height:18px;padding-top:6px}
+ html[data-viewport="mobile"] .page-no{font-size:10px}
+ html[data-viewport="mobile"] .slide-body{width:100%;max-width:none;padding:8px 0;transform-origin:top left;overflow:visible}
+ html[data-viewport="mobile"] .controls{position:absolute;left:auto;right:max(6px,env(safe-area-inset-right));top:50%;bottom:auto;transform:translateY(-50%);width:52px!important;min-height:0}
+ html[data-viewport="mobile"] .nav-group{flex-direction:column;padding:3px;gap:0}
+ html[data-viewport="mobile"] .nav-group button{width:44px;height:44px;min-width:44px;min-height:44px}
+ html[data-viewport="mobile"] .nav-group .count{min-width:44px;font-size:11px;height:26px;display:grid;place-items:center}
+ html[data-viewport="mobile"] .control-divider{width:28px;height:1px;margin:3px 0}
+ html[data-viewport="mobile"][data-orientation="portrait"] .presentation-frame,html[data-viewport="mobile"][data-orientation="portrait"] .controls{visibility:hidden;pointer-events:none}
+ html[data-viewport="mobile"] .micro{font-size:10px;letter-spacing:.09em}
+ html[data-viewport="mobile"] .slide-body.cover{grid-template-columns:1.2fr 1fr;grid-template-rows:auto 1fr auto;gap:12px}
+ html[data-viewport="mobile"] .cover-copy>p{font-size:12px;line-height:1.35;letter-spacing:.04em;margin:0 0 10px}
+ html[data-viewport="mobile"] .cover h1{font-size:34px;margin:0;line-height:.95}
+ html[data-viewport="mobile"] .cover-list button{min-height:44px;padding:6px 8px;grid-template-columns:28px 1fr auto}
+ html[data-viewport="mobile"] .cover-list span{font-size:18px}
+ html[data-viewport="mobile"] .cover-list b{font-size:11px}
+ html[data-viewport="mobile"] .focus{font-size:13px;gap:14px;padding-top:10px}
+ html[data-viewport="mobile"] .focus small{font-size:10px}
+ html[data-viewport="mobile"] .slide-body.platform{grid-template-columns:29% 1fr;gap:14px;align-items:start}
+ html[data-viewport="mobile"] .platform-main{padding:0}
+ html[data-viewport="mobile"] .platform h2{font-size:28px;line-height:.98;margin:8px 0 10px;overflow-wrap:anywhere}
+ html[data-viewport="mobile"] .lead{font-size:13px;line-height:1.3;margin:0}
+ html[data-viewport="mobile"] .tags{margin:10px 0 4px;gap:4px}
+ html[data-viewport="mobile"] .tags span,html[data-viewport="mobile"] .formats span{font-size:10px;padding:4px 6px;letter-spacing:.02em}
+ html[data-viewport="mobile"] .platform-main a{font-size:10px;letter-spacing:.04em;min-height:32px;align-items:center;padding-bottom:0}
+ html[data-viewport="mobile"] .panels{grid-template-columns:.8fr 1.2fr;gap:8px;padding:0;align-items:start}
+ html[data-viewport="mobile"] .panels article{min-height:0;padding:9px 10px;border-radius:12px}
+ html[data-viewport="mobile"] .panels article:nth-child(2){grid-row:2;grid-column:1}
+ html[data-viewport="mobile"] .panels article:nth-child(3){grid-row:1;grid-column:2}
+ html[data-viewport="mobile"] .panels article:nth-child(4){grid-row:2;grid-column:2}
+ html[data-viewport="mobile"] .panels h3{font-size:10px;line-height:1.2;letter-spacing:.04em;margin:0 0 6px}
+ html[data-viewport="mobile"] .panels li{font-size:12px;line-height:1.25;padding:4px 0}
+ html[data-viewport="mobile"] .panels li:before{margin-right:4px}
+ html[data-viewport="mobile"] .formats{gap:4px}
+ html[data-viewport="mobile"] .access strong{font-size:12px;line-height:1.3}
+ html[data-viewport="mobile"] .access p,html[data-viewport="mobile"] .takeaway p{font-size:12px;line-height:1.3;margin:6px 0 0;color:#d2ccd9}
+ html[data-viewport="mobile"] .takeaway{display:block}
+ html[data-viewport="mobile"] .rating{float:left;margin:0 10px 4px 0;font-size:27px;line-height:1}
+ html[data-viewport="mobile"] .rating small{font-size:10px}
+ html[data-viewport="mobile"] .takeaway>div:last-child{display:flow-root}
+ html[data-viewport="mobile"] .slide-no{font-size:110px;top:24px;right:80px}
+ html[data-viewport="mobile"] .slide-body.compare{justify-content:start}
+ html[data-viewport="mobile"] .compare>.micro{margin-bottom:6px}
+ html[data-viewport="mobile"] .compare-head{gap:18px;margin:0 0 10px;align-items:start}
+ html[data-viewport="mobile"] .compare h2{font-size:34px}
+ html[data-viewport="mobile"] .compare-head p{max-width:380px;font-size:11px;line-height:1.25}
+ html[data-viewport="mobile"] .row{grid-template-columns:1.35fr repeat(4,1fr)}
+ html[data-viewport="mobile"] .row span{font-size:12px;line-height:1.15;min-height:28px;padding:5px 7px;gap:3px}
+ html[data-viewport="mobile"] .head span{font-size:10px;min-height:32px;letter-spacing:0}
+ html[data-viewport="mobile"] .head b{margin-bottom:2px}
+ html[data-viewport="mobile"] .fine{margin-top:8px;gap:14px;font-size:10px;line-height:1.2}
+ html[data-viewport="mobile"] .slide-body.result{justify-content:start;padding-top:10px}
+ html[data-viewport="mobile"] .kicker{font-size:10px;padding:4px 8px;margin-bottom:8px;letter-spacing:.07em}
+ html[data-viewport="mobile"] .result-label{font-size:10px;margin:0 0 10px}
+ html[data-viewport="mobile"] .verdict h2{font-size:56px;line-height:.85}
+ html[data-viewport="mobile"] .summary{font-size:13px;line-height:1.3;margin:12px auto 10px;max-width:650px}
+ html[data-viewport="mobile"] .proof{gap:5px}
+ html[data-viewport="mobile"] .proof span{font-size:10px;padding:5px 8px;letter-spacing:.04em}
+ html[data-viewport="mobile"] .alternatives{margin-top:16px;padding-top:10px;width:100%}
+ html[data-viewport="mobile"] .alternatives>p{font-size:10px;margin-bottom:8px}
+ html[data-viewport="mobile"] .alternatives>div{gap:12px}
+ html[data-viewport="mobile"] .alternatives article{grid-template-columns:18px 1fr;gap:4px}
+ html[data-viewport="mobile"] .alternatives span{font-size:10px}
+ html[data-viewport="mobile"] .alternatives b{font-size:14px}
+ html[data-viewport="mobile"] .alternatives em{grid-column:2;font-size:11px;line-height:1.25;color:#c6becf}
+ html[data-viewport="mobile"] .result-number{font-size:260px}
+}
+@media screen {
+ html[data-viewport="mobile"] .footer{position:absolute;bottom:max(10px,env(safe-area-inset-bottom));left:max(16px,env(safe-area-inset-left));right:calc(72px + env(safe-area-inset-right))}
+}
+@media screen {
+ html[data-viewport="mobile"] .slide-body.compare{padding:4px 0}
+ html[data-viewport="mobile"] .compare>.micro{margin-bottom:4px}
+ html[data-viewport="mobile"] .compare-head{margin:0 0 4px;gap:16px}
+ html[data-viewport="mobile"] .compare h2{font-size:30px}
+ html[data-viewport="mobile"] .compare-head p{max-width:430px}
+ html[data-viewport="mobile"] .row span{min-height:22px;padding:3px 7px}
+ html[data-viewport="mobile"] .head span{min-height:28px}
+ html[data-viewport="mobile"] .fine{margin-top:5px}
+}
+</style></head><body><div class="stage"><div class="rotate-prompt" role="status" aria-live="polite" hidden>Поверните телефон горизонтально, чтобы смотреть презентацию</div><div class="presentation-frame" id="frame"><main class="canvas" id="canvas"><section class="slide" data-label="ВВЕДЕНИЕ"><div class="topline"><span class="mark">PLATFORM ANALYSIS</span><span>СЕНТЯБРЬ 2026</span></div><div class="slide-body cover"><div class="micro">ИССЛЕДОВАНИЕ · СЕНТЯБРЬ 2026</div><div class="cover-copy"><p>Четыре платформы, которые превращают визуальный язык сайта в инструкции для <span class="nowrap">AI-агента</span>.</p><h1>Анализ платформ<br>для создания<br><span>HTML-лендингов</span></h1></div><div class="cover-list"><button type="button" data-source-link="1"><b>01</b><span>Neuform</span><i>↗</i></button><button type="button" data-source-link="2"><b>02</b><span>Getdesign</span><i>↗</i></button><button type="button" data-source-link="3"><b>03</b><span>OpenDesign</span><i>↗</i></button><button type="button" data-source-link="4"><b>04</b><span>Refero Styles</span><i>↗</i></button></div><div class="focus"><small>ФОКУС</small><b>Можно ли получить <code>DESIGN.md</code> без дополнительной платы?</b></div></div><div class="footer"><span>ВВЕДЕНИЕ</span><span class="page-no">01 / 07</span></div></section><section class="slide" data-label="Neuform"><div aria-hidden="true" class="slide-no">01</div><div class="topline"><span class="mark">PLATFORM ANALYSIS</span><span>СЕНТЯБРЬ 2026</span></div><div class="slide-body platform"><div class="platform-main"><div class="micro">AI-конструктор</div><h2>Neuform</h2><p class="lead">Генератор, который превращает текстовый запрос в готовую HTML-страницу. Пользователь выбирает шаблон или начинает с промпта, уточняет результат через remix и получает код вместе с правилами дизайна.</p><div class="tags"><span>PROMPT → HTML</span><span>REMIX</span><span>DESIGN SYSTEM</span><span>MOTION</span></div><a href="https://neuform.ai" target="_blank" rel="noopener noreferrer">ОТКРЫТЬ ПЛАТФОРМУ ↗</a></div><div class="panels"><article><h3>✣ Возможности</h3><ul><li>Генерация лендингов и UI</li><li>Публичная библиотека шаблонов</li><li>Remix и итерации по промпту</li><li>Дизайн-система вместе со страницей</li></ul></article><article><h3>Форматы</h3><div class="formats"><span>HTML</span><span>DESIGN.md</span><span>Preview</span><span>App UI</span><span>Slides</span></div></article><article class="access"><h3>⇩ DESIGN.md</h3><strong>Файл формируется как часть созданного проекта. Это не каталог, откуда любой готовый DESIGN.md можно свободно скачать.</strong><p>Каталог можно изучать бесплатно. Для генерации, приватной работы и полноценного экспорта нужен trial либо платный план.</p></article><article class="takeaway"><div class="rating">3.8<small>/5</small></div><div><h3>Кому подходит / вывод</h3><p>Подходит, если нужно быстро создать новый лендинг и сразу получить HTML. Для поиска отдельного бесплатного DESIGN.md сервис менее удобен.</p></div></article></div></div><div class="footer"><span>Neuform</span><span class="page-no">02 / 07</span></div></section><section class="slide" data-label="Getdesign"><div aria-hidden="true" class="slide-no">02</div><div class="topline"><span class="mark">PLATFORM ANALYSIS</span><span>СЕНТЯБРЬ 2026</span></div><div class="slide-body platform"><div class="platform-main"><div class="micro">Каталог дизайн-систем</div><h2>Getdesign</h2><p class="lead">Каталог независимых разборов визуального языка известных сайтов. Пользователь выбирает брендовый референс и передаёт его описание AI-конструктору или кодинг-агенту.</p><div class="tags"><span>550+ STYLES</span><span>SITE ANALYSIS</span><span>LIGHT + DARK</span><span>STARTER KIT</span></div><a href="https://getdesign.md" target="_blank" rel="noopener noreferrer">ОТКРЫТЬ ПЛАТФОРМУ ↗</a></div><div class="panels"><article><h3>✣ Возможности</h3><ul><li>Поиск по каталогу референсов</li><li>Private DESIGN.md по URL</li><li>Светлая и тёмная темы</li><li>Starter kits с исходным кодом</li></ul></article><article><h3>Форматы</h3><div class="formats"><span>DESIGN.md</span><span>HTML preview</span><span>Light / Dark</span><span>Source code</span></div></article><article class="access"><h3>⇩ DESIGN.md</h3><strong>Главное ограничение: без платного оформления скачать DESIGN.md не удалось.</strong><p>Карточки и превью доступны для просмотра. В проверенном пользовательском сценарии переход к файлу потребовал платной подписки или покупки.</p></article><article class="takeaway"><div class="rating">3.6<small>/5</small></div><div><h3>Кому подходит / вывод</h3><p>Понятный сервис для выбора готового стилевого направления. Однако платный барьер не позволяет считать его источником свободно скачиваемых файлов.</p></div></article></div></div><div class="footer"><span>Getdesign</span><span class="page-no">03 / 07</span></div></section><section class="slide" data-label="OpenDesign"><div aria-hidden="true" class="slide-no">03</div><div class="topline"><span class="mark">PLATFORM ANALYSIS</span><span>СЕНТЯБРЬ 2026</span></div><div class="slide-body platform"><div class="platform-main"><div class="micro">Open-source среда</div><h2>OpenDesign</h2><p class="lead">Локальная open-source среда, а не только каталог. Агент извлекает стиль из сайта или создаёт систему по описанию, сохраняет её в проекте и применяет ко всем следующим материалам.</p><div class="tags"><span>OPEN SOURCE</span><span>LOCAL FIRST</span><span>140+ SYSTEMS</span><span>21+ AGENTS</span></div><a href="https://open-design.ai/ru/plugins/templates/" target="_blank" rel="noopener noreferrer">ОТКРЫТЬ ПЛАТФОРМУ ↗</a></div><div class="panels"><article><h3>✣ Возможности</h3><ul><li>Создание DESIGN.md по описанию</li><li>Извлечение стиля из сайта</li><li>Форк готовых дизайн-систем</li><li>Версионирование вместе с проектом</li></ul></article><article><h3>Форматы</h3><div class="formats"><span>DESIGN.md</span><span>HTML</span><span>Prototype</span><span>Slides</span><span>Image</span><span>Video</span><span>Audio</span></div></article><article class="access"><h3>⇩ DESIGN.md</h3><strong>Файл создаётся прямо в локальном проекте либо берётся из публичного GitHub-репозитория — без привязки к закрытому редактору.</strong><p>Приложение, системы и шаблоны бесплатны по Apache-2.0. Расходы возможны только на подключённую внешнюю AI-модель.</p></article><article class="takeaway"><div class="rating">4.7<small>/5</small></div><div><h3>Кому подходит / вывод</h3><p>Подходит для постоянной работы над брендом: один переносимый DESIGN.md управляет сайтами, презентациями, изображениями и видео.</p></div></article></div></div><div class="footer"><span>OpenDesign</span><span class="page-no">04 / 07</span></div></section><section class="slide" data-label="Refero Styles"><div aria-hidden="true" class="slide-no">04</div><div class="topline"><span class="mark">PLATFORM ANALYSIS</span><span>СЕНТЯБРЬ 2026</span></div><div class="slide-body platform"><div class="platform-main"><div class="micro">Библиотека стилей</div><h2>Refero Styles</h2><p class="lead">Большая визуальная база AI-readable дизайн-систем. В карточке стиля собраны цвета, типографика, интервалы, компоненты и правила — их можно передать агенту или перевести в код.</p><div class="tags"><span>2K+ SYSTEMS</span><span>TOKENS</span><span>TAILWIND V4</span><span>MCP</span></div><a href="https://styles.refero.design" target="_blank" rel="noopener noreferrer">ОТКРЫТЬ ПЛАТФОРМУ ↗</a></div><div class="panels"><article><h3>✣ Возможности</h3><ul><li>Поиск и сортировка стилей</li><li>Визуальный просмотр токенов</li><li>Compact и Extended версии</li><li>Поиск агентом через Refero MCP</li></ul></article><article><h3>Форматы</h3><div class="formats"><span>DESIGN.md</span><span>Tailwind v4</span><span>CSS Variables</span><span>Design Tokens</span></div></article><article class="access"><h3>⇩ DESIGN.md</h3><strong>Полный текст показан на странице, но основное действие — Copy .md. Чтобы получить файл, его нужно сохранить вручную.</strong><p>Базовые карточки стилей доступны без оплаты. Подключение полного поиска Refero к агенту относится к отдельной экосистеме.</p></article><article class="takeaway"><div class="rating">4.2<small>/5</small></div><div><h3>Кому подходит / вывод</h3><p>Подходит для поиска референсов и передачи токенов разработчику. Это самый богатый каталог, но не самый прямой путь к скачиваемому файлу.</p></div></article></div></div><div class="footer"><span>Refero Styles</span><span class="page-no">05 / 07</span></div></section><section class="slide" data-label="СРАВНЕНИЕ"><div class="topline"><span class="mark">PLATFORM ANALYSIS</span><span>СЕНТЯБРЬ 2026</span></div><div class="slide-body compare"><div class="micro">ЕДИНАЯ СИСТЕМА ОЦЕНКИ</div><div class="compare-head"><h2>Сравнение</h2><p>К базовым критериям добавлены <b>глубина</b> и <b>переносимость</b>: насколько полно описаны токены, компоненты и правила, и можно ли использовать файл вне исходного сервиса.</p></div><div class="matrix"><div class="row head"><span>КРИТЕРИЙ</span><span><b>01</b>Neuform</span><span><b>02</b>Getdesign</span><span><b>03</b>OpenDesign</span><span><b>04</b>Refero Styles</span></div><div class="row"><span><b>DESIGN.md</b></span><span>Условно</span><span>🔒 Платно</span><span>✓ Да</span><span>Copy .md</span></div><div class="row"><span><b>Без доплаты</b></span><span>Просмотр</span><span>🔒 Нет*</span><span>Да**</span><span>Базово</span></div><div class="row"><span><b>Современные шаблоны</b></span><span>✓ Да</span><span>✓ Да</span><span>✓ Да</span><span>✓ Да</span></div><div class="row"><span><b>Глубина системы</b></span><span>Высокая</span><span>Высокая</span><span>✓ Очень высокая</span><span>✓ Очень высокая</span></div><div class="row"><span><b>Переносимость</b></span><span>Высокая</span><span>Высокая</span><span>✓ Максимальная</span><span>Высокая</span></div><div class="row"><span><b>Простой старт</b></span><span>Средний</span><span>Высокий</span><span>Средний</span><span>Высокий</span></div></div><div class="fine"><span>* Getdesign: вывод основан на фактической попытке скачивания.</span><span>** OpenDesign бесплатен, но внешний AI-провайдер может быть платным.</span></div></div><div class="footer"><span>СРАВНЕНИЕ</span><span class="page-no">06 / 07</span></div></section><section class="slide" data-label="ВЫВОД"><div aria-hidden="true" class="result-number">03</div><div class="topline"><span class="mark">PLATFORM ANALYSIS</span><span>СЕНТЯБРЬ 2026</span></div><div class="slide-body result"><div class="verdict"><span class="kicker">ИТОГ ИССЛЕДОВАНИЯ · 4.7 / 5</span><p class="result-label">Лидер по совокупности критериев</p><h2>OpenDesign</h2><p class="summary">Самая сильная платформа для системной работы: DESIGN.md доступен локально, не привязан к закрытому редактору и применяется не только к лендингам, но и к презентациям, изображениям и видео.</p><div class="proof"><span>Открытый код</span><span>DESIGN.md без подписки</span><span>Максимальная переносимость</span></div></div><div class="alternatives"><p>Если приоритет другой</p><div><article><span>01</span><b>Neuform</b><em>быстрый запуск нового лендинга</em></article><article><span>02</span><b>Getdesign</b><em>готовый стиль и простой старт</em></article><article><span>04</span><b>Refero Styles</b><em>большой каталог визуальных систем</em></article></div></div></div><div class="footer"><span>ВЫВОД</span><span class="page-no">07 / 07</span></div></section></main></div><div class="controls" aria-label="Навигация по слайдам"><div class="nav-group"><button type="button" class="restart" data-restart aria-label="Вернуться в начало" title="Restart">R</button><span class="control-divider" aria-hidden="true"></span><button type="button" data-prev aria-label="Предыдущий слайд">←</button><span class="count">01 / 07</span><button type="button" data-next aria-label="Следующий слайд">→</button><span class="control-divider" aria-hidden="true"></span><button type="button" data-fullscreen aria-label="На весь экран">⛶</button></div></div></div><script>const desktopSlides = [...document.querySelectorAll('.slide')];
+const canvas = document.querySelector('#canvas'), frame = document.querySelector('#frame');
+const stage = document.querySelector('.stage'), controls = document.querySelector('.controls');
+const count = document.querySelector('.count'), rotatePrompt = document.querySelector('.rotate-prompt');
+const prev = document.querySelector('[data-prev]'), next = document.querySelector('[data-next]');
+const fullscreenButton = document.querySelector('[data-fullscreen]');
+const slides=desktopSlides;
+let current=0,mobileMode=false;
+function formatPageNumber(i,total) { return String(i+1).padStart(2,'0')+' / '+String(total).padStart(2,'0'); }
+function goTo(index, updateHash = true) {
+ current = Math.max(0,Math.min(index,slides.length-1));
+ const active = slides[current];
+ slides.forEach(s=>{const on = s===active;s.classList.toggle('is-active',on);s.setAttribute('aria-hidden',String(!on));s.inert=!on;});
+ desktopSlides.forEach((s,i)=>s.querySelector('.page-no').textContent=formatPageNumber(i,desktopSlides.length));
+ count.textContent=formatPageNumber(current,slides.length);
+ prev.disabled=current===0;next.disabled=current===slides.length-1;
+ if(updateHash)history.replaceState(null,'','#slide-'+(current+1));
+ requestAnimationFrame(auditSlideSafeArea);
+}
+function readHash(){const m=location.hash.match(/^#slide-(\d+)/);if(m)goTo(Number(m[1])-1,false);}
+function fitCanvas(){
+ const v=window.visualViewport, w=v?v.width:innerWidth,h=v?v.height:innerHeight;
+ const phone=w<768||(matchMedia('(pointer: coarse)').matches&&Math.min(w,h)<768);
+ document.documentElement.dataset.viewport=phone?'mobile':w<1200?'tablet':'desktop';
+ document.documentElement.dataset.orientation=h>w?'portrait':'landscape';
+ rotatePrompt.hidden=!(phone&&h>w);mobileMode=phone;
+ for(const s of slides){s.querySelector('.slide-body').style.cssText='';}
+ if(phone){stage.style.width=w+'px';stage.style.height=h+'px';frame.style.width=w+'px';frame.style.height=h+'px';canvas.style.width='100%';canvas.style.height='100%';canvas.style.transform='none';controls.style.width='100%';}
+ else {stage.style.width='';stage.style.height='';canvas.style.width='';canvas.style.height='';const st=getComputedStyle(stage);const aw=Math.max(0,w-parseFloat(st.paddingLeft)-parseFloat(st.paddingRight));const ah=Math.max(0,h-parseFloat(st.paddingTop)-parseFloat(st.paddingBottom)-controls.offsetHeight-parseFloat(st.rowGap));const scale=Math.min(aw/1920,ah/1080);frame.style.width=1920*scale+'px';frame.style.height=1080*scale+'px';canvas.style.transform='scale('+scale+')';controls.style.width=Math.min(aw,Math.max(1920*scale,controls.querySelector('.nav-group').scrollWidth))+'px';}
+ if(phone&&w>h)fitMobileSlides();
+ goTo(current,false);
+}
+prev.addEventListener('click',()=>goTo(current-1));next.addEventListener('click',()=>goTo(current+1));
+document.querySelector('[data-restart]').addEventListener('click',()=>goTo(0));
+document.addEventListener('keydown',e=>{if(e.altKey||e.ctrlKey||e.metaKey||e.target.matches('input,textarea,select,[contenteditable]'))return;if(e.key==='Enter'&&e.target.matches('button,a'))return;let index;if(['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)){if(e.key===' '&&e.target.matches('button'))return;index=current+1;}if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key))index=current-1;if(e.key.toLowerCase()==='r'||e.key==='Home')index=0;if(e.key==='End')index=slides.length-1;if(index!==undefined){e.preventDefault();goTo(index);}});
+function updateFullscreenButton(){const active=document.fullscreenElement||document.webkitFullscreenElement;fullscreenButton.textContent=active?'×':'⛶';fullscreenButton.title=active?'Выйти из полноэкранного режима':'На весь экран';fullscreenButton.setAttribute('aria-label',fullscreenButton.title);}
+fullscreenButton.hidden=!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen);
+fullscreenButton.addEventListener('click',async()=>{try{const active=document.fullscreenElement||document.webkitFullscreenElement;if(active){const exit=document.exitFullscreen||document.webkitExitFullscreen;await exit.call(document);}else{const request=document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen;await request.call(document.documentElement);}}catch{fullscreenButton.hidden=true;fitCanvas();}});
+['fullscreenchange','webkitfullscreenchange'].forEach(e=>document.addEventListener(e,()=>{updateFullscreenButton();fitCanvas();}));
+window.addEventListener('resize',fitCanvas);window.addEventListener('orientationchange',fitCanvas);window.addEventListener('hashchange',readHash);
+if(window.visualViewport)window.visualViewport.addEventListener('resize',fitCanvas);
+let touch=null;
+frame.addEventListener('touchstart',e=>{touch=e.touches.length===1&&!e.target.closest('a,button')?{x:e.touches[0].clientX,y:e.touches[0].clientY}:null;},{passive:true});
+frame.addEventListener('touchend',e=>{if(!touch||!e.changedTouches.length)return;const dx=e.changedTouches[0].clientX-touch.x,dy=e.changedTouches[0].clientY-touch.y;touch=null;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.2)goTo(current+(dx<0?1:-1));},{passive:true});
+frame.addEventListener('touchcancel',()=>touch=null,{passive:true});
+function auditSlideSafeArea(){
+ const violations=[];if(mobileMode&&!rotatePrompt.hidden)return violations;
+ for(const [i,slide] of slides.entries()){
+ const body=slide.querySelector('.slide-body');const r=body.getBoundingClientRect();
+ const safe=mobileMode?{left:r.left,top:r.top,right:slide.clientWidth-parseFloat(getComputedStyle(slide).paddingRight),bottom:slide.querySelector('.footer').getBoundingClientRect().top}:r;
+ for(const el of body.querySelectorAll('*')){const x=el.getBoundingClientRect();if(x.width&&x.height&&(x.left<safe.left-1||x.right>safe.right+1||x.top<safe.top-1||x.bottom>safe.bottom+1))violations.push({slide:i+1,element:el.className||el.tagName});}}
+ window.deckAudit=violations;return violations;
+}
+function fitMobileSlides(){
+ for(const slide of slides){
+ const body=slide.querySelector('.slide-body');const width=body.clientWidth,height=slide.querySelector('.footer').getBoundingClientRect().top-body.getBoundingClientRect().top;
+ body.style.height='auto';body.style.flex='none';
+ let best=1;
+ for(let trial=1;trial>=.6;trial-=.01){
+ body.style.width=(width/trial)+'px';
+ if(body.scrollHeight*trial<=height+.1&&body.scrollWidth*trial<=width+.1){best=trial;break;}
+ best=trial;
+ }
+ body.style.width=(width/best)+'px';body.style.transform='scale('+best+')';body.dataset.scale=best.toFixed(2);
+ }
+}
+window.addEventListener('beforeprint',()=>slides.forEach(s=>{s.querySelector('.slide-body').style.cssText='';}));
+window.addEventListener('afterprint',fitCanvas);
+document.addEventListener('click',e=>{const button=e.target.closest('[data-source-link]');if(button)goTo(Number(button.dataset.sourceLink));});
+fitCanvas();readHash();updateFullscreenButton();document.fonts.ready.then(()=>{fitCanvas();auditSlideSafeArea();});
+</script></body></html>
