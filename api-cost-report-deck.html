@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>6Sns / API cost map — deck</title>
+  <style>
+    :root {
+      --design-w: 1920px;
+      --design-h: 1080px;
+      --aspect-ratio: 16 / 9;
+      --safe: 58px;
+      --browser-stage-padding-x: 20px;
+      --browser-stage-padding-y: 20px;
+      --frame-controls-gap: 18px;
+      --bg: #d8d8d5;
+      --panel: #c8c8c5;
+      --panel-2: #e3e3e0;
+      --line: rgba(20, 20, 20, .18);
+      --text: #111112;
+      --muted: #68686a;
+      --dim: #919194;
+      --accent: #c8f24a;
+      --blue: #cbd0df;
+      --green: #a8e5b2;
+      --yellow: #f0d16d;
+      --orange: #ff6b2b;
+      --python: #2d5e73;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; }
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: #000;
+      color: var(--text);
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .stage {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--frame-controls-gap);
+      padding: var(--browser-stage-padding-y) var(--browser-stage-padding-x);
+      overflow: hidden;
+      background: #000;
+      touch-action: pan-y;
+    }
+
+    .presentation-frame {
+      position: relative;
+      width: var(--design-w);
+      height: var(--design-h);
+      flex: none;
+    }
+
+    .canvas {
+      position: absolute;
+      inset: 0;
+      width: var(--design-w);
+      height: var(--design-h);
+      aspect-ratio: var(--aspect-ratio);
+      flex: none;
+      overflow: hidden;
+      transform-origin: top left;
+      will-change: transform;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      padding: var(--safe);
+      overflow: hidden;
+      background: var(--bg);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 220ms ease;
+    }
+
+    .slide.is-active { opacity: 1; visibility: visible; pointer-events: auto; }
+    .slide > * { position: relative; z-index: 1; }
+    .slide-body {
+      width: 1804px;
+      max-width: 100%;
+      min-width: 0;
+      min-height: 0;
+      flex: 1 1 auto;
+      overflow: hidden;
+    }
+
+    .slide.dark { background: #171817; color: #f1f1ee; }
+    .slide.dark .topline, .slide.dark .footer, .slide.dark .footer .page-no { color: rgba(241, 241, 238, .54); }
+    .topline, .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex: 0 0 auto;
+      color: var(--muted);
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1;
+    }
+    .topline { height: 15px; min-height: 15px; letter-spacing: .02em; }
+    .topline .mark { font-weight: 400; letter-spacing: normal; }
+    .footer { height: 45px; min-height: 45px; margin-top: auto; padding-top: 30px; }
+    .footer .page-no { color: var(--muted); font-size: 15px; font-variant-numeric: tabular-nums; }
+
+    .eyebrow, .kicker { color: var(--muted); font-size: 16px; font-weight: 750; letter-spacing: .01em; }
+    .dark .eyebrow, .dark .kicker { color: rgba(241, 241, 238, .54); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      max-width: 1160px;
+      margin: 26px 0 28px;
+      font-size: 104px;
+      line-height: .84;
+      letter-spacing: -.075em;
+    }
+    h2 { margin: 12px 0 18px; font-size: 100px; line-height: .84; letter-spacing: -.075em; }
+    h3 { margin: 0; letter-spacing: -.055em; }
+    .lead { max-width: 660px; margin: 0; color: var(--muted); font-size: 30px; line-height: 1.08; letter-spacing: -.03em; }
+    .dark .lead { color: rgba(241, 241, 238, .64); }
+    .hero-body { display: flex; flex-direction: column; justify-content: space-between; padding-top: 105px; }
+    .hero-main { display: flex; justify-content: space-between; align-items: flex-start; }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 58px; }
+    .chip { display: inline-flex; align-items: center; min-height: 38px; padding: 10px 14px; border-radius: 8px; background: var(--blue); color: var(--text); font-size: 13px; font-weight: 800; }
+    .dark .chip { background: var(--accent); }
+    .hero-note { width: 380px; margin-top: 22px; padding: 28px; border: 1px solid rgba(241, 241, 238, .18); border-radius: 24px; background: rgba(255, 255, 255, .05); }
+    .hero-note strong { display: block; margin-bottom: 14px; color: var(--accent); font-size: 32px; letter-spacing: -.055em; }
+    .hero-note p { margin: 0; color: rgba(241, 241, 238, .64); font-size: 15px; line-height: 1.3; }
+    .hero-bottom { display: flex; align-items: end; justify-content: space-between; padding-bottom: 30px; }
+    .hero-mark { color: var(--accent); font-size: 190px; font-weight: 800; line-height: .72; letter-spacing: -.12em; }
+    .hero-bottom p { width: 380px; margin: 0; color: rgba(241, 241, 238, .54); font-size: 14px; line-height: 1.3; }
+
+    .section-body { display: grid; grid-template-columns: 430px minmax(0, 1fr); gap: 78px; padding-top: 75px; }
+    .section-left { align-self: start; }
+    .section-copy { max-width: 320px; margin: 0; color: var(--muted); font-size: 16px; line-height: 1.3; }
+    .formula { margin: 18px 0 48px; padding: 24px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); font-size: 44px; font-weight: 800; letter-spacing: -.055em; }
+    .formula span { color: var(--muted); font-weight: 400; }
+    .token-map { display: grid; gap: 0; }
+    .token-row { display: grid; grid-template-columns: 150px 1fr; gap: 22px; align-items: center; min-height: 115px; border-top: 1px solid var(--line); }
+    .token-row:last-child { border-bottom: 1px solid var(--line); }
+    .token-row b, .price-head, .role-label, .budget-label { font-size: 13px; font-weight: 800; }
+    .token-row p { margin: 0; color: var(--muted); font-size: 24px; letter-spacing: -.025em; }
+    .token-aside { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 32px; }
+    .mini-card { min-height: 118px; padding: 20px; border-radius: 16px; background: var(--panel-2); }
+    .mini-card b { display: block; margin-bottom: 8px; font-size: 22px; letter-spacing: -.05em; }
+    .mini-card span { color: var(--muted); font-size: 13px; line-height: 1.25; }
+
+    .price-body { padding-top: 72px; }
+    .price-intro { display: flex; align-items: end; justify-content: space-between; margin-bottom: 30px; }
+    .price-intro h2 { margin-bottom: 0; }
+    .price-intro p { width: 330px; margin: 0 80px 8px 0; color: var(--muted); font-size: 16px; line-height: 1.3; }
+    .pricing { display: grid; gap: 0; }
+    .price-row { display: grid; grid-template-columns: 1.35fr .8fr .8fr .9fr .9fr; gap: 18px; align-items: center; min-height: 99px; border-top: 1px solid var(--line); }
+    .price-row:last-of-type { border-bottom: 1px solid var(--line); }
+    .price-row.head { min-height: 52px; border-top: 0; color: var(--muted); }
+    .price-row.head .price-head { font-size: 11px; letter-spacing: .05em; text-transform: uppercase; }
+    .price-head small { display: block; margin-top: 5px; color: var(--dim); font-size: 10px; letter-spacing: 0; text-transform: none; }
+    .price-row strong { display: block; font-size: 20px; letter-spacing: -.03em; }
+    .price-row small { color: var(--muted); font-size: 12px; }
+    .price { font-size: 24px; font-weight: 800; letter-spacing: -.04em; }
+    .price-row.qwen { border-radius: 14px; background: rgba(168, 229, 178, .42); }
+    .assumptions { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 24px; }
+    .assumption { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.35; }
+
+    .roles-body { padding-top: 88px; }
+    .roles-head { display: flex; align-items: end; justify-content: space-between; margin-bottom: 34px; }
+    .roles-head h2 { margin-bottom: 0; }
+    .roles-head p { width: 330px; margin: 0 80px 7px 0; color: var(--muted); font-size: 16px; line-height: 1.3; }
+    .role-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .role-card { min-height: 555px; padding: 32px; border: 1px solid var(--line); border-top: 5px solid var(--text); border-radius: 22px; background: rgba(227, 227, 224, .72); }
+    .role-card.ai { border-top-color: var(--orange); }
+    .role-card.python { border-top-color: var(--python); }
+    .role-card h3 { margin-bottom: 10px; font-size: 39px; }
+    .role-card > p { margin-bottom: 30px; color: var(--muted); font-size: 16px; }
+    .role-list { display: grid; gap: 13px; margin: 0; padding: 0; list-style: none; }
+    .role-list li { display: grid; grid-template-columns: 20px 1fr; gap: 9px; font-size: 17px; line-height: 1.25; }
+    .role-list li::before { content: "✓"; color: var(--orange); font-weight: 900; }
+    .role-card.python .role-list li::before { color: var(--python); }
+    .role-tag { display: inline-flex; margin-bottom: 20px; padding: 8px 10px; border-radius: 7px; background: var(--panel); color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+
+    .flow-body { padding-top: 102px; }
+    .flow-header { display: flex; align-items: end; justify-content: space-between; }
+    .flow-header h2 { margin-bottom: 0; }
+    .flow-header p { width: 340px; margin: 0 80px 8px 0; color: var(--muted); font-size: 16px; line-height: 1.3; }
+    .architecture-flow { display: grid; grid-template-columns: 260px 1fr 310px 1fr 310px 1fr 260px; align-items: center; margin-top: 100px; }
+    .flow-node { min-height: 208px; display: grid; place-items: center; align-content: center; gap: 12px; padding: 26px; border: 1px solid var(--line); border-radius: 50%; aspect-ratio: 1; background: var(--panel-2); text-align: center; }
+    .flow-node.accent { background: var(--accent); border-color: transparent; }
+    .flow-node.dark { background: #272927; color: #f1f1ee; }
+    .flow-node b { font-size: 28px; letter-spacing: -.05em; }
+    .flow-node span { max-width: 150px; color: var(--muted); font-size: 12px; line-height: 1.2; }
+    .flow-node.dark span { color: rgba(241, 241, 238, .58); }
+    .flow-arrow { height: 1px; margin: 0 20px; background: var(--line); position: relative; }
+    .flow-arrow::after { content: "→"; position: absolute; right: -1px; top: -15px; color: var(--muted); font-size: 24px; }
+    .flow-notes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 92px; }
+    .flow-note { padding: 20px; border-top: 2px solid var(--text); }
+    .flow-note b { display: block; margin-bottom: 9px; font-size: 14px; }
+    .flow-note span { color: var(--muted); font-size: 13px; line-height: 1.25; }
+
+    .budget-body { padding-top: 76px; }
+    .budget-header { display: flex; align-items: end; justify-content: space-between; }
+    .budget-header h2 { margin-bottom: 0; }
+    .budget-header p { width: 330px; margin: 0 80px 8px 0; color: var(--muted); font-size: 16px; line-height: 1.3; }
+    .budget-line { display: grid; grid-template-columns: repeat(3, 1fr); margin: 74px 0 42px; }
+    .budget-stop { position: relative; min-height: 135px; padding: 18px 20px; border-top: 2px solid var(--text); }
+    .budget-stop:not(:last-child)::after { content: ""; position: absolute; top: -7px; right: -7px; width: 12px; height: 12px; border-radius: 50%; background: var(--text); }
+    .budget-stop:last-child { border-color: #b55332; }
+    .budget-stop:last-child::after { background: #b55332; }
+    .budget-stop b { display: block; margin-bottom: 9px; font-size: 48px; letter-spacing: -.06em; }
+    .budget-stop span { color: var(--muted); font-size: 14px; }
+    .budget-rows { display: grid; grid-template-columns: 1fr 1fr; column-gap: 60px; }
+    .budget-row { display: grid; grid-template-columns: 34px 1fr; gap: 18px; align-items: center; min-height: 64px; border-top: 1px solid var(--line); }
+    .budget-row:nth-last-child(-n+2) { border-bottom: 1px solid var(--line); }
+    .budget-row b { color: var(--dim); font-size: 12px; }
+    .budget-row p { margin: 0; font-size: 15px; line-height: 1.25; }
+    .budget-callout { margin-top: 25px; padding: 17px 20px; border-radius: 12px; background: #b55332; color: #fff; font-size: 15px; font-weight: 700; }
+
+    .sources-body { padding-top: 116px; }
+    .sources-body h2 { max-width: 700px; margin-bottom: 62px; }
+    .source-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .source { min-height: 150px; padding: 18px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; line-height: 1.3; text-decoration: none; }
+    .source b { display: block; margin-bottom: 8px; color: var(--text); font-size: 20px; letter-spacing: -.04em; }
+    .sources-note { display: flex; justify-content: space-between; align-items: end; margin-top: 155px; padding-top: 20px; border-top: 1px solid var(--line); }
+    .sources-note p { max-width: 500px; margin: 0; color: var(--muted); font-size: 15px; line-height: 1.3; }
+    .sources-note strong { color: var(--text); font-size: 54px; letter-spacing: -.07em; }
+
+    .controls { position: relative; z-index: 20; display: flex; align-items: center; justify-content: center; width: 100%; min-height: 40px; color: #f5f5f2; font: 14px Arial, sans-serif; }
+    .nav-group { display: flex; align-items: center; gap: 6px; padding: 6px; border: 1px solid rgba(255, 255, 255, .08); border-radius: 999px; background: rgba(24, 24, 24, .94); backdrop-filter: blur(14px); }
+    .nav-group button { width: 30px; height: 26px; border: 0; border-radius: 999px; background: transparent; color: #f5f5f2; cursor: pointer; font-size: 18px; font-weight: 400; line-height: 1; }
+    .nav-group button:hover { background: rgba(255, 255, 255, .12); }
+    .controls .count { min-width: 60px; text-align: center; font-variant-numeric: tabular-nums; }
+    .nav-group .control-divider { width: 1px; height: 18px; margin: 0 3px; background: rgba(255, 255, 255, .16); }
+    .nav-group .fullscreen { font-size: 19px; }
+    .nav-group .restart { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 26px; padding: 0; font-size: 14px; }
+
+    /* Responsive viewport modes: the slide remains a 16:9 canvas and scales as one unit. */
+    html[data-viewport="tablet"] .stage { padding: 16px; }
+    html[data-viewport="tablet"] .nav-group button { width: 34px; height: 32px; }
+    html[data-viewport="tablet"] .nav-group .restart { width: 34px; height: 32px; }
+
+    html[data-viewport="mobile"] .stage {
+      gap: 10px;
+      padding: calc(12px + env(safe-area-inset-top))
+        calc(8px + env(safe-area-inset-right))
+        calc(12px + env(safe-area-inset-bottom))
+        calc(8px + env(safe-area-inset-left));
+    }
+    html[data-viewport="mobile"] .controls { min-height: 48px; }
+    html[data-viewport="mobile"] .nav-group { gap: 4px; padding: 5px; }
+    html[data-viewport="mobile"] .nav-group button,
+    html[data-viewport="mobile"] .nav-group .restart {
+      width: 42px;
+      height: 38px;
+    }
+    html[data-viewport="mobile"] .nav-group button { font-size: 20px; }
+    html[data-viewport="mobile"] .nav-group .restart { font-size: 15px; }
+    html[data-viewport="mobile"] .controls .count { min-width: 68px; font-size: 13px; }
+
+    @media print {
+      @page { size: 1920px 1080px; margin: 0; }
+      body { overflow: visible; background: #000; }
+      .stage { position: static; display: block; overflow: visible; }
+      .presentation-frame { width: 1920px; height: auto; }
+      .canvas { position: relative; width: 1920px; height: 1080px; transform: none !important; }
+      .slide { position: relative; opacity: 1; visibility: visible; page-break-after: always; break-after: page; }
+      .controls { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="presentation-frame" id="frame">
+      <main class="canvas" id="canvas">
+        <section class="slide dark is-active" data-label="Обзор">
+          <div class="topline"><span class="mark">6Sns / AI pipeline</span><span>API cost map · 23.08.2026</span></div>
+          <div class="slide-body hero-body">
+            <div class="hero-main">
+              <div>
+                <div class="eyebrow">Система презентаций</div>
+                <h1>Подключение API<br>к системе презентаций</h1>
+                <p class="lead">ИИ-система — понимает задачу, «мозг».<br>Python — дизайнерский движок, собирает слайды.</p>
+                <div class="hero-meta"><span class="chip">API</span><span class="chip">токены</span><span class="chip">стоимость</span><span class="chip">лимиты</span></div>
+              </div>
+              <aside class="hero-note"><strong>20 слайдов</strong><p>Ориентир для одного AI-прохода: 20K input + 30K output. Без сервера, хранения и генерации изображений.</p></aside>
+            </div>
+            <div class="hero-bottom"><div class="hero-mark">API</div><p>Карта расходов и ролей внутри pipeline: от запроса пользователя до настоящего .pptx.</p></div>
+          </div>
+          <div class="footer"><span>Обзор</span><span class="page-no">01 / 07</span></div>
+        </section>
+
+        <section class="slide" data-label="Токены">
+          <div class="topline"><span class="mark">6Sns / API cost map</span><span>Input → output</span></div>
+          <div class="slide-body section-body">
+            <div class="section-left"><div class="kicker">(01)</div><h2>Токены</h2><p class="section-copy">API получает вход и возвращает ответ.</p></div>
+            <div>
+              <div class="formula">стоимость <span>=</span> input × тариф <span>+</span> output × тариф</div>
+              <div class="token-map">
+                <div class="token-row"><b>INPUT</b><p>вопрос · история · инструкции · документы · изображения</p></div>
+                <div class="token-row"><b>OUTPUT</b><p>ответ Claude / Codex / Qwen · структура презентации для Python</p></div>
+              </div>
+              <div class="token-aside"><div class="mini-card"><b>01</b><span>Текст задачи и контекст пользователя</span></div><div class="mini-card"><b>02</b><span>Материалы и ограничения проекта</span></div><div class="mini-card"><b>03</b><span>JSON deck model для backend</span></div></div>
+            </div>
+          </div>
+          <div class="footer"><span>Токены</span><span class="page-no">02 / 07</span></div>
+        </section>
+
+        <section class="slide" data-label="Цены">
+          <div class="topline"><span class="mark">6Sns / API cost map</span><span>Model pricing</span></div>
+          <div class="slide-body price-body">
+            <div class="price-intro"><h2>Цены</h2><p>Ориентир: 20K input + 30K output на одну презентацию.</p></div>
+            <div class="pricing">
+              <div class="price-row head"><span class="price-head">Модель</span><span class="price-head">Вход<small>за 1M токенов</small></span><span class="price-head">Выход<small>за 1M токенов</small></span><span class="price-head">1 deck<small>20 слайдов</small></span><span class="price-head">100 deck<small>ориентир</small></span></div>
+              <div class="price-row"><span><strong>Claude Opus 5</strong><small>Claude API</small></span><span class="price">$5</span><span class="price">$25</span><span class="price">$0.85</span><span class="price">$85</span></div>
+              <div class="price-row"><span><strong>GPT-5-Codex</strong><small>OpenAI / Codex</small></span><span class="price">$1.25</span><span class="price">$10</span><span class="price">$0.33</span><span class="price">$32.50</span></div>
+              <div class="price-row qwen"><span><strong>Qwen3.8-Max</strong><small>International / Singapore</small></span><span class="price">$2</span><span class="price">$6</span><span class="price">$0.22</span><span class="price">$22</span></div>
+            </div>
+            <div class="assumptions"><p class="assumption">Один AI-проход. В вашей системе output может быть больше input: модель формирует структуру 20 слайдов и JSON deck model.</p><p class="assumption">Без сервера, хранения, генерации изображений и повторных запросов.</p></div>
+          </div>
+          <div class="footer"><span>Цены</span><span class="page-no">03 / 07</span></div>
+        </section>
+
+        <section class="slide" data-label="Роли">
+          <div class="topline"><span class="mark">6Sns / AI pipeline</span><span>Who does what</span></div>
+          <div class="slide-body roles-body">
+            <div class="roles-head"><h2>Роли</h2><p>Модель принимает решения. Python собирает файл.</p></div>
+            <div class="role-grid">
+              <article class="role-card ai"><span class="role-tag">Смысл и управление</span><h3>Подключённая AI-система</h3><p>Смысловая и управленческая часть pipeline.</p><ul class="role-list"><li>понимает задачу и материалы</li><li>строит storyline на 20 слайдов</li><li>выбирает типы слайдов</li><li>пишет и сокращает текст</li><li>выбирает изображения и стиль</li><li>возвращает JSON deck model</li><li>принимает правки и вызывает backend-функции</li></ul></article>
+              <article class="role-card python"><span class="role-tag">Точность и сборка</span><h3>Python</h3><p>Точный исполнитель и дизайнерский движок.</p><ul class="role-list"><li>извлекает текст из PDF и PPTX</li><li>проверяет JSON и DeckModel</li><li>считает layout, сетку и отступы</li><li>применяет style-library</li><li>собирает настоящий .pptx</li><li>делает preview, QA и версии</li><li>сохраняет и отдаёт финальный файл</li></ul></article>
+            </div>
+          </div>
+          <div class="footer"><span>Роли</span><span class="page-no">04 / 07</span></div>
+        </section>
+
+        <section class="slide" data-label="Pipeline">
+          <div class="topline"><span class="mark">6Sns / AI pipeline</span><span>From brief to .pptx</span></div>
+          <div class="slide-body flow-body">
+            <div class="flow-header"><h2>Поток</h2><p>Каждый слой отвечает за свою часть работы — от смысла до проверенного файла.</p></div>
+            <div class="architecture-flow"><div class="flow-node"><b>Brief</b><span>задача<br>материалы</span></div><div class="flow-arrow"></div><div class="flow-node accent"><b>AI</b><span>storyline<br>контент · стиль</span></div><div class="flow-arrow"></div><div class="flow-node dark"><b>JSON</b><span>deck model<br>для backend</span></div><div class="flow-arrow"></div><div class="flow-node"><b>.pptx</b><span>layout<br>preview · QA</span></div></div>
+            <div class="flow-notes"><div class="flow-note"><b>Понимание</b><span>Модель превращает материалы в структуру презентации.</span></div><div class="flow-note"><b>Валидация</b><span>Python проверяет JSON, сетку, отступы и ограничения.</span></div><div class="flow-note"><b>Результат</b><span>На выходе — настоящий файл, версии и preview для контроля.</span></div></div>
+          </div>
+          <div class="footer"><span>Pipeline</span><span class="page-no">05 / 07</span></div>
+        </section>
+
+        <section class="slide" data-label="Лимиты">
+          <div class="topline"><span class="mark">6Sns / API cost map</span><span>Cost control</span></div>
+          <div class="slide-body budget-body">
+            <div class="budget-header"><h2>Лимиты</h2><p>Система считает расход и блокирует новые генерации после лимита.</p></div>
+            <div class="budget-line"><div class="budget-stop"><b>$0</b><span>работа разрешена</span></div><div class="budget-stop"><b>$10</b><span>предупреждение</span></div><div class="budget-stop"><b>$20</b><span>стоп новых генераций</span></div></div>
+            <div class="budget-rows"><div class="budget-row"><b>01</b><p>получить фактический расход токенов после запроса</p></div><div class="budget-row"><b>02</b><p>посчитать стоимость: входные токены × тариф + выходные токены × тариф</p></div><div class="budget-row"><b>03</b><p>сохранить расход в базе</p></div><div class="budget-row"><b>04</b><p>перед новым запросом проверить остаток бюджета</p></div><div class="budget-row"><b>05</b><p>если лимит достигнут — остановить новые генерации</p></div><div class="budget-row"><b>↳</b><p>Пользователь получает сообщение: «Месячный бюджет исчерпан»</p></div></div>
+            <div class="budget-callout">Стоимость запроса известна до следующей генерации — бюджет контролируется на каждом проходе.</div>
+          </div>
+          <div class="footer"><span>Лимиты</span><span class="page-no">06 / 07</span></div>
+        </section>
+
+        <section class="slide" data-label="Источники">
+          <div class="topline"><span class="mark">6Sns / API cost map</span><span>Reference links</span></div>
+          <div class="slide-body sources-body">
+            <div class="kicker">Документация</div><h2>Источники<br>тарифов</h2>
+            <div class="source-list"><a class="source" href="https://platform.claude.com/docs/en/about-claude/pricing" target="_blank" rel="noreferrer"><b>Claude</b>Anthropic pricing</a><a class="source" href="https://developers.openai.com/api/docs/models/gpt-5-codex" target="_blank" rel="noreferrer"><b>Codex</b>OpenAI model page</a><a class="source" href="https://www.alibabacloud.com/help/en/model-studio/qwen3-8-max" target="_blank" rel="noreferrer"><b>Qwen</b>Alibaba Cloud Model Studio</a><a class="source" href="https://www.alibabacloud.com/help/en/model-studio/rate-limit" target="_blank" rel="noreferrer"><b>Limits</b>Alibaba Cloud cost control</a></div>
+            <div class="sources-note"><p>Расчёты — ориентир для одного AI-прохода. Перед запуском сверяйте актуальные тарифы провайдеров.</p><strong>6Sns</strong></div>
+          </div>
+          <div class="footer"><span>Источники</span><span class="page-no">07 / 07</span></div>
+        </section>
+      </main>
+    </div>
+
+    <div class="controls" aria-label="Навигация по слайдам">
+      <div class="nav-group">
+        <button type="button" class="restart" data-restart aria-label="Вернуться в начало" title="Restart">R</button>
+        <span class="control-divider" aria-hidden="true"></span>
+        <button type="button" data-prev aria-label="Предыдущий слайд">←</button>
+        <span class="count">01 / 07</span>
+        <button type="button" data-next aria-label="Следующий слайд">→</button>
+        <span class="control-divider" aria-hidden="true"></span>
+        <button type="button" class="fullscreen" data-fullscreen aria-label="На весь экран" title="Enter full screen">⛶</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const slides = [...document.querySelectorAll(".slide")];
+    const count = document.querySelector(".count");
+    const frame = document.querySelector("#frame");
+    const canvas = document.querySelector("#canvas");
+    const controls = document.querySelector(".controls");
+    const fullscreenButton = document.querySelector("[data-fullscreen]");
+    let current = 0;
+
+    function formatPageNumber(index, total) {
+      return String(index + 1).padStart(2, "0") + " / " + String(total).padStart(2, "0");
+    }
+
+    function goTo(index) {
+      current = Math.max(0, Math.min(index, slides.length - 1));
+      slides.forEach((slide, i) => {
+        slide.classList.toggle("is-active", i === current);
+        const pageNo = slide.querySelector(".page-no");
+        if (pageNo) pageNo.textContent = formatPageNumber(i, slides.length);
+      });
+      count.textContent = formatPageNumber(current, slides.length);
+      history.replaceState(null, "", "#slide-" + String(current + 1));
+    }
+
+    document.querySelector("[data-prev]").addEventListener("click", () => goTo(current - 1));
+    document.querySelector("[data-next]").addEventListener("click", () => goTo(current + 1));
+    document.querySelector("[data-restart]").addEventListener("click", () => goTo(0));
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key.toLowerCase() === "r" || event.key === "Home") goTo(0);
+      if (event.key === "End") goTo(slides.length - 1);
+      if (["ArrowRight", "ArrowDown", "PageDown", " "].includes(event.key)) {
+        event.preventDefault();
+        goTo(current + 1);
+      }
+      if (["ArrowLeft", "ArrowUp", "PageUp"].includes(event.key)) {
+        event.preventDefault();
+        goTo(current - 1);
+      }
+    });
+
+    function fitCanvas() {
+      const visualViewport = window.visualViewport;
+      const width = visualViewport ? visualViewport.width : window.innerWidth;
+      const height = visualViewport ? visualViewport.height : window.innerHeight;
+      const viewportMode = width >= 1200 ? "desktop" : width >= 768 ? "tablet" : "mobile";
+      document.documentElement.dataset.viewport = viewportMode;
+
+      const horizontalPadding = viewportMode === "mobile" ? 16 : viewportMode === "tablet" ? 32 : 40;
+      const verticalPadding = viewportMode === "mobile" ? 24 : viewportMode === "tablet" ? 32 : 40;
+      const frameControlsGap = viewportMode === "mobile" ? 10 : 18;
+      const controlHeight = controls.offsetHeight || 40;
+      const availableWidth = Math.max(280, width - horizontalPadding);
+      const availableHeight = Math.max(240, height - verticalPadding - controlHeight - frameControlsGap);
+      const scale = Math.min(availableWidth / 1920, availableHeight / 1080);
+      frame.style.width = (1920 * scale) + "px";
+      frame.style.height = (1080 * scale) + "px";
+      controls.style.width = (1920 * scale) + "px";
+      canvas.style.transform = "scale(" + scale + ")";
+    }
+
+    function updateFullscreenButton() {
+      const active = document.fullscreenElement || document.webkitFullscreenElement;
+      fullscreenButton.textContent = active ? "×" : "⛶";
+      fullscreenButton.title = active ? "Exit full screen" : "Enter full screen";
+    }
+
+    fullscreenButton.addEventListener("click", async () => {
+      const active = document.fullscreenElement || document.webkitFullscreenElement;
+      if (active) {
+        const exit = document.exitFullscreen || document.webkitExitFullscreen;
+        if (exit) await exit.call(document);
+      } else {
+        const request = document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen;
+        if (request) await request.call(document.documentElement);
+      }
+    });
+
+    document.addEventListener("fullscreenchange", () => { updateFullscreenButton(); fitCanvas(); });
+    window.addEventListener("resize", fitCanvas);
+    if (window.visualViewport) window.visualViewport.addEventListener("resize", fitCanvas);
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchTracking = false;
+    const swipeSurface = document.querySelector(".stage");
+
+    swipeSurface.addEventListener("touchstart", (event) => {
+      if (event.touches.length !== 1) return;
+      touchStartX = event.touches[0].clientX;
+      touchStartY = event.touches[0].clientY;
+      touchTracking = true;
+    }, { passive: true });
+
+    swipeSurface.addEventListener("touchend", (event) => {
+      if (!touchTracking || !event.changedTouches.length) return;
+      touchTracking = false;
+      const touch = event.changedTouches[0];
+      const deltaX = touch.clientX - touchStartX;
+      const deltaY = touch.clientY - touchStartY;
+      if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
+        goTo(current + (deltaX < 0 ? 1 : -1));
+      }
+    }, { passive: true });
+
+    swipeSurface.addEventListener("touchcancel", () => { touchTracking = false; }, { passive: true });
+
+    function auditSlideSafeArea() {
+      const violations = [];
+      slides.forEach((slide, index) => {
+        const slideRect = slide.getBoundingClientRect();
+        const scale = slideRect.width / 1920;
+        const safe = { left: slideRect.left + 58 * scale, right: slideRect.right - 58 * scale, top: slideRect.top + 58 * scale, bottom: slideRect.bottom - 58 * scale };
+        [...slide.querySelectorAll(".slide-body *")].forEach((element) => {
+          const rect = element.getBoundingClientRect();
+          if (rect.left < safe.left - 1 || rect.right > safe.right + 1 || rect.top < safe.top - 1 || rect.bottom > safe.bottom + 1) {
+            violations.push("слайд " + String(index + 1).padStart(2, "0") + ": " + element.className);
+          }
+        });
+      });
+      if (violations.length) console.warn("Контент выходит за безопасную зону:", violations);
+    }
+
+    const hashSlide = Number(location.hash.replace("#slide-", "")) - 1;
+    if (Number.isInteger(hashSlide) && hashSlide >= 0) current = Math.min(hashSlide, slides.length - 1);
+    goTo(current);
+    fitCanvas();
+    requestAnimationFrame(auditSlideSafeArea);
+  </script>
+</body>
+</html>
