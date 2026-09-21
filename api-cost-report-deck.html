@@ -250,22 +250,39 @@
     html[data-viewport="tablet"] .nav-group .restart { width: 34px; height: 32px; }
 
     html[data-viewport="mobile"] .stage {
-      gap: 10px;
-      padding: calc(12px + env(safe-area-inset-top))
-        calc(8px + env(safe-area-inset-right))
-        calc(12px + env(safe-area-inset-bottom))
-        calc(8px + env(safe-area-inset-left));
+      gap: 8px;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right)
+        env(safe-area-inset-bottom) env(safe-area-inset-left);
+      background: var(--bg);
     }
-    html[data-viewport="mobile"] .controls { min-height: 48px; }
+    html[data-viewport="mobile"] .controls { min-height: 54px; }
     html[data-viewport="mobile"] .nav-group { gap: 4px; padding: 5px; }
     html[data-viewport="mobile"] .nav-group button,
     html[data-viewport="mobile"] .nav-group .restart {
-      width: 42px;
-      height: 38px;
+      width: 44px;
+      height: 44px;
     }
     html[data-viewport="mobile"] .nav-group button { font-size: 20px; }
     html[data-viewport="mobile"] .nav-group .restart { font-size: 15px; }
     html[data-viewport="mobile"] .controls .count { min-width: 68px; font-size: 13px; }
+    .orientation-hint {
+      position: absolute;
+      z-index: 30;
+      top: calc(env(safe-area-inset-top) + 12px);
+      left: 50%;
+      width: max-content;
+      max-width: calc(100% - 24px);
+      transform: translateX(-50%);
+      margin: 0;
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: rgba(24, 24, 24, .94);
+      color: #fff;
+      font: 14px/1.3 Arial, sans-serif;
+      text-align: center;
+      pointer-events: none;
+    }
+    .orientation-hint[hidden] { display: none; }
 
     @media print {
       @page { size: 1920px 1080px; margin: 0; }
@@ -275,11 +292,13 @@
       .canvas { position: relative; width: 1920px; height: 1080px; transform: none !important; }
       .slide { position: relative; opacity: 1; visibility: visible; page-break-after: always; break-after: page; }
       .controls { display: none; }
+      .orientation-hint { display: none; }
     }
   </style>
 </head>
 <body>
   <div class="stage">
+    <p class="orientation-hint" role="status" hidden>Для удобного просмотра поверните телефон горизонтально</p>
     <div class="presentation-frame" id="frame">
       <main class="canvas" id="canvas">
         <section class="slide dark is-active" data-label="Обзор">
@@ -394,6 +413,8 @@
     const frame = document.querySelector("#frame");
     const canvas = document.querySelector("#canvas");
     const controls = document.querySelector(".controls");
+    const stage = document.querySelector(".stage");
+    const orientationHint = document.querySelector(".orientation-hint");
     const fullscreenButton = document.querySelector("[data-fullscreen]");
     let current = 0;
 
@@ -409,6 +430,9 @@
         if (pageNo) pageNo.textContent = formatPageNumber(i, slides.length);
       });
       count.textContent = formatPageNumber(current, slides.length);
+      if (document.documentElement.dataset.viewport === "mobile") {
+        stage.style.backgroundColor = getComputedStyle(slides[current]).backgroundColor;
+      }
       history.replaceState(null, "", "#slide-" + String(current + 1));
     }
 
@@ -433,19 +457,30 @@
       const visualViewport = window.visualViewport;
       const width = visualViewport ? visualViewport.width : window.innerWidth;
       const height = visualViewport ? visualViewport.height : window.innerHeight;
-      const viewportMode = width >= 1200 ? "desktop" : width >= 768 ? "tablet" : "mobile";
+      const touchScreen = matchMedia("(pointer: coarse)").matches;
+      const viewportMode = touchScreen && Math.min(width, height) < 768
+        ? "mobile" : width >= 1200 ? "desktop" : width >= 768 ? "tablet" : "mobile";
       document.documentElement.dataset.viewport = viewportMode;
+      stage.style.backgroundColor = viewportMode === "mobile"
+        ? getComputedStyle(slides[current]).backgroundColor : "";
+      if (!orientationHintSeen && viewportMode === "mobile" && height > width) {
+        orientationHint.hidden = false;
+      } else {
+        orientationHint.hidden = true;
+        if (height <= width) orientationHintSeen = true;
+      }
 
-      const horizontalPadding = viewportMode === "mobile" ? 16 : viewportMode === "tablet" ? 32 : 40;
-      const verticalPadding = viewportMode === "mobile" ? 24 : viewportMode === "tablet" ? 32 : 40;
-      const frameControlsGap = viewportMode === "mobile" ? 10 : 18;
+      const stageStyle = getComputedStyle(stage);
+      const horizontalPadding = parseFloat(stageStyle.paddingLeft) + parseFloat(stageStyle.paddingRight);
+      const verticalPadding = parseFloat(stageStyle.paddingTop) + parseFloat(stageStyle.paddingBottom);
+      const frameControlsGap = parseFloat(stageStyle.rowGap) || 0;
       const controlHeight = controls.offsetHeight || 40;
-      const availableWidth = Math.max(280, width - horizontalPadding);
-      const availableHeight = Math.max(240, height - verticalPadding - controlHeight - frameControlsGap);
+      const availableWidth = Math.max(0, width - horizontalPadding);
+      const availableHeight = Math.max(0, height - verticalPadding - controlHeight - frameControlsGap);
       const scale = Math.min(availableWidth / 1920, availableHeight / 1080);
       frame.style.width = (1920 * scale) + "px";
       frame.style.height = (1080 * scale) + "px";
-      controls.style.width = (1920 * scale) + "px";
+      controls.style.width = Math.min(availableWidth, Math.max(1920 * scale, controls.querySelector(".nav-group").scrollWidth)) + "px";
       canvas.style.transform = "scale(" + scale + ")";
     }
 
@@ -468,6 +503,7 @@
 
     document.addEventListener("fullscreenchange", () => { updateFullscreenButton(); fitCanvas(); });
     window.addEventListener("resize", fitCanvas);
+    window.addEventListener("orientationchange", fitCanvas);
     if (window.visualViewport) window.visualViewport.addEventListener("resize", fitCanvas);
 
     let touchStartX = 0;
@@ -476,7 +512,8 @@
     const swipeSurface = document.querySelector(".stage");
 
     swipeSurface.addEventListener("touchstart", (event) => {
-      if (event.touches.length !== 1) return;
+      touchTracking = false;
+      if (event.touches.length !== 1 || event.target.closest("button, a, input, select, textarea, [role='button']")) return;
       touchStartX = event.touches[0].clientX;
       touchStartY = event.touches[0].clientY;
       touchTracking = true;
@@ -514,7 +551,9 @@
     const hashSlide = Number(location.hash.replace("#slide-", "")) - 1;
     if (Number.isInteger(hashSlide) && hashSlide >= 0) current = Math.min(hashSlide, slides.length - 1);
     goTo(current);
+    let orientationHintSeen = false;
     fitCanvas();
+    document.fonts.ready.then(fitCanvas);
     requestAnimationFrame(auditSlideSafeArea);
   </script>
 </body>
