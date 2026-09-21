@@ -244,197 +244,116 @@
     .nav-group .fullscreen { font-size: 19px; }
     .nav-group .restart { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 26px; padding: 0; font-size: 14px; }
 
-    /* Responsive viewport modes: the slide remains a 16:9 canvas and scales as one unit. */
-    html[data-viewport="tablet"] .stage { padding: 16px; }
-    html[data-viewport="tablet"] .nav-group button { width: 34px; height: 32px; }
-    html[data-viewport="tablet"] .nav-group .restart { width: 34px; height: 32px; }
-
+    .mobile-slide { display: none; }
+    .rotate-prompt[hidden] { display: none !important; }
+    button:focus-visible, a:focus-visible { outline: 3px solid #c8f24a; outline-offset: 3px; }
+    button:disabled { opacity: .35; cursor: default; }
     @media screen {
-    /* A phone uses the whole viewport and reflows slide content instead of shrinking 1920px. */
-    html[data-viewport="mobile"] .stage {
-      inset: 0;
-      width: 100%;
-      height: 100dvh;
-      display: block;
-      padding: 0;
-      gap: 0;
-      background: var(--bg);
+      html[data-viewport="tablet"] .stage { padding: 16px; }
+      html[data-viewport="tablet"] .nav-group button { width: 44px; height: 44px; }
+      html[data-viewport="mobile"] .stage { padding: 0; gap: 0; }
+      html[data-viewport="mobile"] .slide:not(.mobile-slide) { display: none; }
+      html[data-viewport="mobile"] .mobile-slide { display: flex; padding: max(12px, env(safe-area-inset-top)) max(22px, env(safe-area-inset-right)) calc(68px + env(safe-area-inset-bottom)) max(22px, env(safe-area-inset-left)); }
+      html[data-viewport="mobile"] .topline { font-size: 12px; height: 15px; min-height: 15px; }
+      html[data-viewport="mobile"] .footer { font-size: 12px; height: 22px; min-height: 22px; padding-top: 8px; }
+      html[data-viewport="mobile"] .footer .page-no { font-size: 12px; }
+      html[data-viewport="mobile"] .slide-body { width: 100%; padding: 10px 0 0; }
+      html[data-viewport="mobile"] .controls { position: absolute; bottom: calc(6px + env(safe-area-inset-bottom)); left: 0; width: 100%; }
+      html[data-viewport="mobile"] .nav-group { padding: 3px; }
+      html[data-viewport="mobile"] .nav-group button { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
+      html[data-viewport="mobile"][data-orientation="portrait"] .presentation-frame,
+      html[data-viewport="mobile"][data-orientation="portrait"] .controls { visibility: hidden; pointer-events: none; }
+      .rotate-prompt { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: #171817; color: #fff; padding: 32px; font-size: 22px; line-height: 1.4; text-align: center; }
+      .mobile-slide h1 { max-width: none; margin: 8px 0 12px; font-size: 38px; line-height: .98; letter-spacing: -.055em; }
+      .mobile-slide h2 { margin: 0 0 12px; font-size: 30px; line-height: 1; }
+      .mobile-slide h3 { font-size: 23px; }
+      .mobile-slide p, .mobile-slide li { font-size: 14px; line-height: 1.25; }
+      .mobile-slide .eyebrow, .mobile-slide .kicker { font-size: 12px; }
+      .mobile-slide .lead { max-width: none; font-size: 17px; }
+      .mobile-slide .hero-meta { margin-top: 12px; gap: 6px; }
+      .mobile-slide .chip { min-height: 24px; padding: 5px 10px; font-size: 12px; }
+      .mobile-slide .hero-note { width: 52%; margin: 0; padding: 18px; border-radius: 16px; }
+      .mobile-slide .hero-note strong { font-size: 28px; margin-bottom: 10px; }
+      .mobile-slide .hero-note p { font-size: 14px; }
+      .mobile-slide .hero-bottom { width: 43%; display: block; padding: 0; }
+      .mobile-slide .hero-mark { font-size: 76px; margin: 8px 0 18px; }
+      .mobile-slide .hero-bottom p { width: auto; font-size: 14px; }
+      .mobile-slide .m-columns { display: flex; justify-content: space-between; gap: 24px; align-items: start; }
+      .mobile-slide .section-copy { max-width: none; font-size: 14px; }
+      .mobile-slide .formula { margin: 12px 0; padding: 12px 0; font-size: 24px; }
+      .mobile-slide .token-row { grid-template-columns: 80px 1fr; gap: 14px; min-height: 54px; }
+      .mobile-slide .token-row p { font-size: 16px; }
+      .mobile-slide .token-aside { margin-top: 18px; gap: 12px; }
+      .mobile-slide .mini-card { min-height: 96px; padding: 16px; }
+      .mobile-slide .mini-card span { font-size: 14px; }
+      .mobile-slide .price-intro { margin-bottom: 10px; align-items: start; }
+      .mobile-slide .price-intro h2 { margin: 0; }
+      .mobile-slide .price-intro p { width: 300px; margin: 0; font-size: 14px; }
+      .mobile-slide .price-row { grid-template-columns: 1.45fr .7fr .7fr .8fr .8fr; min-height: 64px; gap: 12px; }
+      .mobile-slide .price-row.head { min-height: 44px; }
+      .mobile-slide .price-row.head .price-head, .mobile-slide .price-row small { font-size: 12px; }
+      .mobile-slide .price-head small { font-size: 12px; }
+      .mobile-slide .price-row strong { font-size: 17px; }
+      .mobile-slide .price { font-size: 22px; }
+      .mobile-slide .assumptions { margin-top: 12px; gap: 24px; }
+      .mobile-slide .assumption { font-size: 16px; }
+      .mobile-slide .roles-head { margin: 0 0 10px; }
+      .mobile-slide .roles-head h2 { margin: 0; }
+      .mobile-slide .roles-head p { width: 340px; margin: 0; font-size: 14px; }
+      .mobile-slide .role-card { min-height: 0; padding: 10px 14px; border-radius: 12px; }
+      .mobile-slide .role-tag { float: right; margin: 0 0 0 12px; padding: 5px 8px; font-size: 11px; }
+      .mobile-slide .role-card h3 { margin-bottom: 4px; font-size: 22px; }
+      .mobile-slide .role-card > p { margin-bottom: 10px; font-size: 14px; }
+      .mobile-slide .role-list { grid-template-columns: 1fr 1fr; gap: 7px 20px; }
+      .mobile-slide .role-list li { font-size: 14px; grid-template-columns: 14px 1fr; gap: 6px; }
+      .mobile-slide .flow-header, .mobile-slide .budget-header { align-items: start; gap: 30px; }
+      .mobile-slide .flow-header p, .mobile-slide .budget-header p { width: 380px; margin: 0; font-size: 14px; }
+      .mobile-slide .architecture-flow { grid-template-columns: 112px 1fr 112px 1fr 112px 1fr 112px; margin-top: 12px; }
+      .mobile-slide .flow-node { width: 112px; height: 112px; min-height: 112px; padding: 10px; gap: 6px; }
+      .mobile-slide .flow-node b { font-size: 22px; }
+      .mobile-slide .flow-node span { font-size: 12px; }
+      .mobile-slide .flow-arrow { margin: 0 10px; }
+      .mobile-slide .flow-notes { margin-top: 18px; gap: 16px; }
+      .mobile-slide .flow-note { padding: 14px 0; }
+      .mobile-slide .flow-note span { font-size: 14px; }
+      .mobile-slide .budget-line { margin: 18px 0 0; }
+      .mobile-slide .budget-stop { min-height: 0; padding: 14px; }
+      .mobile-slide .budget-stop b { font-size: 36px; }
+      .mobile-slide .budget-rows { grid-template-columns: 1fr 1fr; gap: 0 28px; }
+      .mobile-slide .budget-row { min-height: 48px; grid-template-columns: 22px 1fr; gap: 10px; }
+      .mobile-slide .budget-row p { font-size: 14px; }
+      .mobile-slide .budget-callout { margin-top: 12px; padding: 12px; font-size: 14px; }
+      .mobile-slide .source-list { gap: 18px; margin-top: 12px; }
+      .mobile-slide .source { min-height: 80px; padding: 12px 0; font-size: 14px; }
+      .mobile-slide .source b { font-size: 22px; }
+      .mobile-slide .sources-note { margin-top: 14px; padding-top: 16px; }
+      .mobile-slide .sources-note p { max-width: 500px; font-size: 16px; }
+      .mobile-slide .sources-note strong { font-size: 60px; }
     }
-    html[data-viewport="mobile"] .presentation-frame,
-    html[data-viewport="mobile"] .canvas {
-      width: 100%;
-      height: 100%;
-    }
-    html[data-viewport="mobile"] .canvas { transform: none !important; }
-    html[data-viewport="mobile"] .slide {
-      padding: calc(env(safe-area-inset-top) + 12px)
-        calc(env(safe-area-inset-right) + 18px)
-        calc(env(safe-area-inset-bottom) + 12px)
-        calc(env(safe-area-inset-left) + 18px);
-    }
-    html[data-viewport="mobile"] .topline,
-    html[data-viewport="mobile"] .footer { display: none; }
-    html[data-viewport="mobile"] .slide-body {
-      width: 100%;
-      max-width: none;
-      height: 100%;
-      overflow: auto;
-      overscroll-behavior: contain;
-      scrollbar-width: thin;
-      padding: 0 0 64px;
-    }
-    html[data-viewport="mobile"] .controls {
-      position: absolute;
-      left: 50%;
-      bottom: calc(env(safe-area-inset-bottom) + 5px);
-      width: max-content !important;
-      min-height: 0;
-      transform: translateX(-50%);
-    }
-    html[data-viewport="mobile"] .nav-group { gap: 2px; padding: 2px; }
-    html[data-viewport="mobile"] .nav-group button,
-    html[data-viewport="mobile"] .nav-group .restart {
-      width: 44px;
-      height: 44px;
-    }
-    html[data-viewport="mobile"] .nav-group button { font-size: 20px; }
-    html[data-viewport="mobile"] .nav-group .restart { font-size: 14px; }
-    html[data-viewport="mobile"] .controls .count { min-width: 48px; font-size: 12px; }
-    html[data-viewport="mobile"] .control-divider,
-    html[data-viewport="mobile"] .fullscreen { display: none !important; }
-
-    /* Phone slide typography and geometry: readable CSS pixels, with internal scrolling for dense slides. */
-    html[data-viewport="mobile"] h1,
-    html[data-viewport="mobile"] h2 { font-size: clamp(24px, 4.5vw, 36px); line-height: .95; letter-spacing: -.055em; }
-    html[data-viewport="mobile"] h1 { margin: 8px 0; }
-    html[data-viewport="mobile"] h2 { margin: 4px 0 8px; }
-    html[data-viewport="mobile"] .eyebrow,
-    html[data-viewport="mobile"] .kicker { font-size: 12px; }
-    html[data-viewport="mobile"] .lead { font-size: 14px; line-height: 1.18; }
-    html[data-viewport="mobile"] .hero-body { padding-top: 8px; }
-    html[data-viewport="mobile"] .hero-main { gap: 14px; }
-    html[data-viewport="mobile"] .hero-main > div { min-width: 0; }
-    html[data-viewport="mobile"] .hero-meta { margin-top: 12px; gap: 4px; }
-    html[data-viewport="mobile"] .chip { min-height: 24px; padding: 5px 7px; font-size: 10px; }
-    html[data-viewport="mobile"] .hero-note { width: 29%; flex: none; margin-top: 0; padding: 10px; border-radius: 10px; }
-    html[data-viewport="mobile"] .hero-note strong { margin-bottom: 5px; font-size: 18px; }
-    html[data-viewport="mobile"] .hero-note p { font-size: 11px; }
-    html[data-viewport="mobile"] .hero-bottom { padding: 10px 0 0; }
-    html[data-viewport="mobile"] .hero-mark { font-size: clamp(54px, 11vw, 90px); }
-    html[data-viewport="mobile"] .hero-bottom p { width: 32%; font-size: 11px; }
-
-    html[data-viewport="mobile"] .section-body { grid-template-columns: 24% minmax(0, 1fr); gap: 16px; padding-top: 3px; }
-    html[data-viewport="mobile"] .section-copy,
-    html[data-viewport="mobile"] .price-intro p,
-    html[data-viewport="mobile"] .roles-head p,
-    html[data-viewport="mobile"] .flow-header p,
-    html[data-viewport="mobile"] .budget-header p { width: auto; margin: 0; font-size: 12px; line-height: 1.25; }
-    html[data-viewport="mobile"] .formula { margin: 0 0 8px; padding: 8px 0; font-size: 17px; }
-    html[data-viewport="mobile"] .token-row { grid-template-columns: 60px 1fr; gap: 8px; min-height: 46px; }
-    html[data-viewport="mobile"] .token-row b { font-size: 11px; }
-    html[data-viewport="mobile"] .token-row p { font-size: 12px; }
-    html[data-viewport="mobile"] .token-aside { gap: 6px; margin-top: 8px; }
-    html[data-viewport="mobile"] .mini-card { min-height: 58px; padding: 7px; border-radius: 8px; }
-    html[data-viewport="mobile"] .mini-card b { margin-bottom: 3px; font-size: 14px; }
-    html[data-viewport="mobile"] .mini-card span { font-size: 10px; }
-
-    html[data-viewport="mobile"] .price-body,
-    html[data-viewport="mobile"] .roles-body,
-    html[data-viewport="mobile"] .flow-body,
-    html[data-viewport="mobile"] .budget-body,
-    html[data-viewport="mobile"] .sources-body { padding-top: 3px; }
-    html[data-viewport="mobile"] .price-intro,
-    html[data-viewport="mobile"] .roles-head { margin-bottom: 10px; }
-    html[data-viewport="mobile"] .price-intro p,
-    html[data-viewport="mobile"] .roles-head p,
-    html[data-viewport="mobile"] .flow-header p,
-    html[data-viewport="mobile"] .budget-header p { max-width: 34%; }
-    html[data-viewport="mobile"] .price-row { gap: 5px; min-height: 48px; }
-    html[data-viewport="mobile"] .price-row.head { min-height: 36px; }
-    html[data-viewport="mobile"] .price-row.head .price-head { font-size: 10px; }
-    html[data-viewport="mobile"] .price-head small { font-size: 9px; }
-    html[data-viewport="mobile"] .price-row strong,
-    html[data-viewport="mobile"] .price { font-size: 13px; }
-    html[data-viewport="mobile"] .price-row small,
-    html[data-viewport="mobile"] .assumption { font-size: 10px; }
-    html[data-viewport="mobile"] .assumptions { gap: 12px; margin-top: 10px; }
-    html[data-viewport="mobile"] .role-grid { gap: 10px; }
-    html[data-viewport="mobile"] .role-card { min-height: 0; padding: 12px; border-radius: 12px; }
-    html[data-viewport="mobile"] .role-card h3 { font-size: 19px; }
-    html[data-viewport="mobile"] .role-card > p { margin-bottom: 12px; font-size: 11px; }
-    html[data-viewport="mobile"] .role-tag { margin-bottom: 7px; padding: 5px; font-size: 9px; }
-    html[data-viewport="mobile"] .role-list { gap: 6px; }
-    html[data-viewport="mobile"] .role-list li { grid-template-columns: 13px 1fr; gap: 3px; font-size: 11px; }
-
-    html[data-viewport="mobile"] .architecture-flow { grid-template-columns: 1fr 24px 1fr 24px 1fr 24px 1fr; margin-top: 16px; }
-    html[data-viewport="mobile"] .flow-node { min-height: 0; padding: 6px; gap: 4px; }
-    html[data-viewport="mobile"] .flow-node b { font-size: 17px; }
-    html[data-viewport="mobile"] .flow-node span { font-size: 10px; }
-    html[data-viewport="mobile"] .flow-arrow { margin: 0 4px; }
-    html[data-viewport="mobile"] .flow-arrow::after { top: -11px; font-size: 17px; }
-    html[data-viewport="mobile"] .flow-notes { gap: 8px; margin-top: 16px; }
-    html[data-viewport="mobile"] .flow-note { padding: 7px; }
-    html[data-viewport="mobile"] .flow-note b { margin-bottom: 4px; font-size: 11px; }
-    html[data-viewport="mobile"] .flow-note span { font-size: 10px; }
-
-    html[data-viewport="mobile"] .budget-line { margin: 10px 0; }
-    html[data-viewport="mobile"] .budget-stop { min-height: 55px; padding: 6px 8px; }
-    html[data-viewport="mobile"] .budget-stop b { margin-bottom: 3px; font-size: 22px; }
-    html[data-viewport="mobile"] .budget-stop span { font-size: 11px; }
-    html[data-viewport="mobile"] .budget-rows { column-gap: 16px; }
-    html[data-viewport="mobile"] .budget-row { grid-template-columns: 20px 1fr; gap: 5px; min-height: 38px; }
-    html[data-viewport="mobile"] .budget-row p { font-size: 11px; }
-    html[data-viewport="mobile"] .budget-callout { margin-top: 9px; padding: 8px; font-size: 11px; }
-    html[data-viewport="mobile"] .sources-body h2 { margin-bottom: 10px; }
-    html[data-viewport="mobile"] .source-list { gap: 10px; }
-    html[data-viewport="mobile"] .source { min-height: 65px; padding: 7px 0; font-size: 11px; }
-    html[data-viewport="mobile"] .source b { margin-bottom: 4px; font-size: 15px; }
-    html[data-viewport="mobile"] .sources-note { margin-top: 20px; padding-top: 10px; }
-    html[data-viewport="mobile"] .sources-note p { font-size: 11px; }
-    html[data-viewport="mobile"] .sources-note strong { font-size: 26px; }
-
-    .orientation-hint[hidden] { display: none; }
-    html[data-viewport="mobile"][data-orientation="portrait"] .orientation-hint {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      margin: 0;
-      padding: 32px;
-      background: #171817;
-      color: #f1f1ee;
-      font: 700 24px/1.2 Arial, sans-serif;
-      text-align: center;
-    }
-    html[data-viewport="mobile"][data-orientation="portrait"] .orientation-hint::before {
-      content: "↻";
-      color: var(--accent);
-      font-size: 56px;
-    }
-    html[data-viewport="mobile"][data-orientation="portrait"] .presentation-frame,
-    html[data-viewport="mobile"][data-orientation="portrait"] .controls { visibility: hidden; pointer-events: none; }
-    html[data-viewport="mobile"][data-orientation="portrait"] .slide-body { overflow: hidden; }
-    }
-
     @media print {
       @page { size: 1920px 1080px; margin: 0; }
-      body { overflow: visible; background: #000; }
-      .stage { position: static; display: block; width: auto !important; height: auto !important; overflow: visible; }
+      html, body { width: 1920px; height: auto; overflow: visible; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .stage { position: static; display: block; width: 1920px !important; height: auto !important; padding: 0; overflow: visible; }
       .presentation-frame { width: 1920px !important; height: auto !important; }
-      .canvas { position: relative; width: 1920px; height: 1080px; transform: none !important; }
-      .slide { position: relative; opacity: 1; visibility: visible; page-break-after: always; break-after: page; }
-      .controls { display: none; }
-      .orientation-hint { display: none; }
+      .canvas { position: relative; width: 1920px !important; height: auto !important; transform: none !important; overflow: visible; }
+      .slide { position: relative; width: 1920px; height: 1080px; opacity: 1; visibility: visible; break-after: page; }
+      .slide:last-of-type { break-after: auto; }
+      .mobile-slide, .controls, .rotate-prompt { display: none !important; }
     }
+    @media screen {
+      .mobile-slide h1 { font-size: 32px; margin: 6px 0 10px; }
+      .mobile-slide .role-list { gap: 3px 20px; }
+      .mobile-slide .role-card > p { margin-bottom: 6px; }
+      .mobile-slide .role-card { padding: 8px 14px; }
+      .mobile-slide .budget-row { min-height: 42px; }
+      .mobile-slide .source { min-height: 70px; }
+    }
+    @media screen { .mobile-slide .role-card h3 { margin-right: 200px; } }
   </style>
 </head>
 <body>
   <div class="stage">
-    <p class="orientation-hint" role="status" hidden>Для удобного просмотра поверните телефон горизонтально</p>
+    <div class="rotate-prompt" role="status" aria-live="polite" hidden>Поверните телефон горизонтально, чтобы смотреть презентацию</div>
     <div class="presentation-frame" id="frame">
       <main class="canvas" id="canvas">
         <section class="slide dark is-active" data-label="Обзор">
@@ -544,164 +463,91 @@
   </div>
 
   <script>
-    const slides = [...document.querySelectorAll(".slide")];
-    const count = document.querySelector(".count");
-    const frame = document.querySelector("#frame");
-    const canvas = document.querySelector("#canvas");
-    const controls = document.querySelector(".controls");
-    const stage = document.querySelector(".stage");
-    const orientationHint = document.querySelector(".orientation-hint");
-    const fullscreenButton = document.querySelector("[data-fullscreen]");
-    let current = 0;
+const desktopSlides = [...document.querySelectorAll('.slide')];
+const canvas = document.querySelector('#canvas'), frame = document.querySelector('#frame');
+const stage = document.querySelector('.stage'), controls = document.querySelector('.controls');
+const count = document.querySelector('.count'), rotatePrompt = document.querySelector('.rotate-prompt');
+const prev = document.querySelector('[data-prev]'), next = document.querySelector('[data-next]');
+const fullscreenButton = document.querySelector('[data-fullscreen]');
+const mobileSlides = [];
+function copy(n, selector) { return desktopSlides[n].querySelector(selector).outerHTML; }
+function mobile(n, content) {
+  const original = desktopSlides[n], slide = document.createElement('section');
+  slide.className = 'slide mobile-slide' + (original.classList.contains('dark') ? ' dark' : '');
+  slide.dataset.source = n;
+  slide.dataset.label = original.dataset.label;
+  slide.innerHTML = original.querySelector('.topline').outerHTML + '<div class="slide-body">'+content+'</div>'+original.querySelector('.footer').outerHTML;
+  canvas.append(slide); mobileSlides.push(slide);
+}
+mobile(0, desktopSlides[0].querySelector('.hero-main > div').innerHTML);
+mobile(0, '<div class="m-columns">'+copy(0,'.hero-note')+copy(0,'.hero-bottom')+'</div>');
+mobile(1, desktopSlides[1].querySelector('.section-left').innerHTML + copy(1,'.formula'));
+mobile(1, '<h2>Токены</h2>'+copy(1,'.token-map'));
+mobile(1, '<h2>Токены</h2>'+copy(1,'.token-aside'));
+// Keep the five-column comparison structure, with one model per small screen.
+for (const row of [...desktopSlides[2].querySelectorAll('.price-row:not(.head)')]) {
+ mobile(2, copy(2,'.price-intro')+'<div class="pricing">'+copy(2,'.price-row.head')+row.outerHTML+'</div>');
+}
+mobile(2, '<h2>Цены</h2>'+copy(2,'.assumptions'));
+for (const card of desktopSlides[3].querySelectorAll('.role-card')) {
+ const items=[...card.querySelectorAll('li')];
+ for(let offset=0;offset<items.length;offset+=4){const part=card.cloneNode(true);part.querySelector('.role-list').replaceChildren(...items.slice(offset,offset+4).map(x=>x.cloneNode(true)));mobile(3,copy(3,'.roles-head')+part.outerHTML);}
+}
+mobile(4, copy(4,'.flow-header')+copy(4,'.architecture-flow'));
+mobile(4, '<h2>Поток</h2>'+copy(4,'.flow-notes'));
+mobile(5, copy(5,'.budget-header')+copy(5,'.budget-line'));
+mobile(5, '<h2>Лимиты</h2>'+copy(5,'.budget-rows'));
+mobile(5, '<h2>Лимиты</h2>'+copy(5,'.budget-callout'));
+mobile(6, copy(6,'.kicker')+copy(6,'h2').replace('<br>',' ')+copy(6,'.source-list'));
+mobile(6, '<h2>Источники тарифов</h2>'+copy(6,'.sources-note'));
+const allSlides = [...desktopSlides, ...mobileSlides];
+let slides = desktopSlides, current = 0, mobileMode = false;
+function formatPageNumber(i,total) { return String(i+1).padStart(2,'0')+' / '+String(total).padStart(2,'0'); }
+function goTo(index, updateHash = true) {
+ current = Math.max(0,Math.min(index,slides.length-1));
+ const active = slides[current];
+ allSlides.forEach(s=>{const on = s===active;s.classList.toggle('is-active',on);s.setAttribute('aria-hidden',String(!on));s.inert=!on;});
+ desktopSlides.forEach((s,i)=>s.querySelector('.page-no').textContent=formatPageNumber(i,desktopSlides.length));
+ mobileSlides.forEach((s,i)=>s.querySelector('.page-no').textContent=formatPageNumber(i,mobileSlides.length));
+ count.textContent=formatPageNumber(current,slides.length);
+ prev.disabled=current===0;next.disabled=current===slides.length-1;
+ if(updateHash){const source=mobileMode?Number(active.dataset.source):current;const part=mobileMode?current-mobileSlides.findIndex(s=>Number(s.dataset.source)===source)+1:1;history.replaceState(null,'','#slide-'+(source+1)+(part>1?'-part-'+part:''));}
+ requestAnimationFrame(auditSlideSafeArea);
+}
+function readHash(){const m=location.hash.match(/^#slide-(\d+)(?:-part-(\d+))?$/);if(!m)return;const source=Math.min(desktopSlides.length-1,Math.max(0,Number(m[1])-1));let index=source;if(mobileMode){const first=mobileSlides.findIndex(s=>Number(s.dataset.source)===source),total=mobileSlides.filter(s=>Number(s.dataset.source)===source).length;index=first+Math.min(total-1,Math.max(0,Number(m[2]||1)-1));}goTo(index,false);}
+function fitCanvas(){
+ const v=window.visualViewport, w=v?v.width:innerWidth,h=v?v.height:innerHeight;
+ const phone=w<768||(matchMedia('(pointer: coarse)').matches&&Math.min(w,h)<768);
+ const source=mobileMode?Number(slides[current].dataset.source):current;
+ document.documentElement.dataset.viewport=phone?'mobile':w<1200?'tablet':'desktop';
+ document.documentElement.dataset.orientation=h>w?'portrait':'landscape';
+ rotatePrompt.hidden=!(phone&&h>w);
+ if(phone!==mobileMode){mobileMode=phone;slides=phone?mobileSlides:desktopSlides;current=phone?mobileSlides.findIndex(s=>Number(s.dataset.source)===source):source;}
+ if(phone){stage.style.width=w+'px';stage.style.height=h+'px';frame.style.width=w+'px';frame.style.height=h+'px';canvas.style.width='100%';canvas.style.height='100%';canvas.style.transform='none';controls.style.width='100%';}
+ else {stage.style.width='';stage.style.height='';canvas.style.width='';canvas.style.height='';const st=getComputedStyle(stage);const aw=Math.max(0,w-parseFloat(st.paddingLeft)-parseFloat(st.paddingRight));const ah=Math.max(0,h-parseFloat(st.paddingTop)-parseFloat(st.paddingBottom)-controls.offsetHeight-parseFloat(st.rowGap));const scale=Math.min(aw/1920,ah/1080);frame.style.width=1920*scale+'px';frame.style.height=1080*scale+'px';canvas.style.transform='scale('+scale+')';controls.style.width=Math.min(aw,Math.max(1920*scale,controls.querySelector('.nav-group').scrollWidth))+'px';}
+ goTo(current,false);
+}
+prev.addEventListener('click',()=>goTo(current-1));next.addEventListener('click',()=>goTo(current+1));
+document.querySelector('[data-restart]').addEventListener('click',()=>goTo(0));
+document.addEventListener('keydown',e=>{if(e.altKey||e.ctrlKey||e.metaKey||e.target.matches('input,textarea,select,[contenteditable]'))return;if(e.key==='Enter'&&e.target.matches('button,a'))return;let index;if(['ArrowRight','ArrowDown','PageDown',' '].includes(e.key)){if(e.key===' '&&e.target.matches('button'))return;index=current+1;}if(['ArrowLeft','ArrowUp','PageUp'].includes(e.key))index=current-1;if(e.key.toLowerCase()==='r'||e.key==='Home')index=0;if(e.key==='End')index=slides.length-1;if(index!==undefined){e.preventDefault();goTo(index);}});
+function updateFullscreenButton(){const active=document.fullscreenElement||document.webkitFullscreenElement;fullscreenButton.textContent=active?'×':'⛶';fullscreenButton.title=active?'Выйти из полноэкранного режима':'На весь экран';fullscreenButton.setAttribute('aria-label',fullscreenButton.title);}
+fullscreenButton.hidden=!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen);
+fullscreenButton.addEventListener('click',async()=>{try{const active=document.fullscreenElement||document.webkitFullscreenElement;if(active){const exit=document.exitFullscreen||document.webkitExitFullscreen;await exit.call(document);}else{const request=document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen;await request.call(document.documentElement);}}catch{fullscreenButton.hidden=true;fitCanvas();}});
+['fullscreenchange','webkitfullscreenchange'].forEach(e=>document.addEventListener(e,()=>{updateFullscreenButton();fitCanvas();}));
+window.addEventListener('resize',fitCanvas);window.addEventListener('orientationchange',fitCanvas);window.addEventListener('hashchange',readHash);
+if(window.visualViewport)window.visualViewport.addEventListener('resize',fitCanvas);
+let touch=null;
+frame.addEventListener('touchstart',e=>{touch=e.touches.length===1&&!e.target.closest('a,button')?{x:e.touches[0].clientX,y:e.touches[0].clientY}:null;},{passive:true});
+frame.addEventListener('touchend',e=>{if(!touch||!e.changedTouches.length)return;const dx=e.changedTouches[0].clientX-touch.x,dy=e.changedTouches[0].clientY-touch.y;touch=null;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)*1.2)goTo(current+(dx<0?1:-1));},{passive:true});
+frame.addEventListener('touchcancel',()=>touch=null,{passive:true});
+function auditSlideSafeArea(){
+ const violations=[];
+ if(mobileMode&&!rotatePrompt.hidden)return violations;
+ for(const slide of slides){const body=slide.querySelector('.slide-body'),safe=body.getBoundingClientRect();for(const el of body.querySelectorAll('*')){const r=el.getBoundingClientRect();if(!r.width&&!r.height)continue;if(r.left<safe.left-1||r.right>safe.right+1||r.top<safe.top-1||r.bottom>safe.bottom+1)violations.push({slide:slides.indexOf(slide)+1,element:el.className||el.tagName});}}
+ window.deckAudit=violations;return violations;
+}
+fitCanvas();readHash();updateFullscreenButton();document.fonts.ready.then(()=>{fitCanvas();auditSlideSafeArea();});
 
-    function formatPageNumber(index, total) {
-      return String(index + 1).padStart(2, "0") + " / " + String(total).padStart(2, "0");
-    }
-
-    function goTo(index) {
-      current = Math.max(0, Math.min(index, slides.length - 1));
-      slides.forEach((slide, i) => {
-        slide.classList.toggle("is-active", i === current);
-        const pageNo = slide.querySelector(".page-no");
-        if (pageNo) pageNo.textContent = formatPageNumber(i, slides.length);
-      });
-      count.textContent = formatPageNumber(current, slides.length);
-      if (document.documentElement.dataset.viewport === "mobile") {
-        stage.style.backgroundColor = getComputedStyle(slides[current]).backgroundColor;
-        slides[current].querySelector(".slide-body").scrollTop = 0;
-      }
-      history.replaceState(null, "", "#slide-" + String(current + 1));
-    }
-
-    document.querySelector("[data-prev]").addEventListener("click", () => goTo(current - 1));
-    document.querySelector("[data-next]").addEventListener("click", () => goTo(current + 1));
-    document.querySelector("[data-restart]").addEventListener("click", () => goTo(0));
-
-    document.addEventListener("keydown", (event) => {
-      if (event.key.toLowerCase() === "r" || event.key === "Home") goTo(0);
-      if (event.key === "End") goTo(slides.length - 1);
-      if (["ArrowRight", "ArrowDown", "PageDown", " "].includes(event.key)) {
-        event.preventDefault();
-        goTo(current + 1);
-      }
-      if (["ArrowLeft", "ArrowUp", "PageUp"].includes(event.key)) {
-        event.preventDefault();
-        goTo(current - 1);
-      }
-    });
-
-    function fitCanvas() {
-      const visualViewport = window.visualViewport;
-      const width = visualViewport ? visualViewport.width : window.innerWidth;
-      const height = visualViewport ? visualViewport.height : window.innerHeight;
-      const touchScreen = matchMedia("(pointer: coarse)").matches;
-      const viewportMode = touchScreen && Math.min(width, height) < 768
-        ? "mobile" : width >= 1200 ? "desktop" : width >= 768 ? "tablet" : "mobile";
-      document.documentElement.dataset.viewport = viewportMode;
-      document.documentElement.dataset.orientation = height > width ? "portrait" : "landscape";
-      stage.style.backgroundColor = viewportMode === "mobile"
-        ? getComputedStyle(slides[current]).backgroundColor : "";
-      orientationHint.hidden = !(viewportMode === "mobile" && height > width);
-      if (viewportMode === "mobile") {
-        stage.style.width = width + "px";
-        stage.style.height = height + "px";
-        frame.style.width = width + "px";
-        frame.style.height = height + "px";
-        controls.style.width = "";
-        canvas.style.transform = "none";
-        return;
-      }
-      stage.style.width = "";
-      stage.style.height = "";
-
-      const stageStyle = getComputedStyle(stage);
-      const horizontalPadding = parseFloat(stageStyle.paddingLeft) + parseFloat(stageStyle.paddingRight);
-      const verticalPadding = parseFloat(stageStyle.paddingTop) + parseFloat(stageStyle.paddingBottom);
-      const frameControlsGap = parseFloat(stageStyle.rowGap) || 0;
-      const controlHeight = controls.offsetHeight || 40;
-      const availableWidth = Math.max(0, width - horizontalPadding);
-      const availableHeight = Math.max(0, height - verticalPadding - controlHeight - frameControlsGap);
-      const scale = Math.min(availableWidth / 1920, availableHeight / 1080);
-      frame.style.width = (1920 * scale) + "px";
-      frame.style.height = (1080 * scale) + "px";
-      controls.style.width = Math.min(availableWidth, Math.max(1920 * scale, controls.querySelector(".nav-group").scrollWidth)) + "px";
-      canvas.style.transform = "scale(" + scale + ")";
-    }
-
-    function updateFullscreenButton() {
-      const active = document.fullscreenElement || document.webkitFullscreenElement;
-      fullscreenButton.hidden = !active && !(
-        document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen
-      );
-      fullscreenButton.textContent = active ? "×" : "⛶";
-      fullscreenButton.title = active ? "Exit full screen" : "Enter full screen";
-    }
-
-    fullscreenButton.addEventListener("click", async () => {
-      const active = document.fullscreenElement || document.webkitFullscreenElement;
-      if (active) {
-        const exit = document.exitFullscreen || document.webkitExitFullscreen;
-        if (exit) await exit.call(document);
-      } else {
-        const request = document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen;
-        if (request) await request.call(document.documentElement);
-      }
-    });
-
-    document.addEventListener("fullscreenchange", () => { updateFullscreenButton(); fitCanvas(); });
-    window.addEventListener("resize", fitCanvas);
-    window.addEventListener("orientationchange", fitCanvas);
-    if (window.visualViewport) window.visualViewport.addEventListener("resize", fitCanvas);
-
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let touchTracking = false;
-    const swipeSurface = document.querySelector(".stage");
-
-    swipeSurface.addEventListener("touchstart", (event) => {
-      touchTracking = false;
-      if (event.touches.length !== 1 || event.target.closest("button, a, input, select, textarea, [role='button']")) return;
-      touchStartX = event.touches[0].clientX;
-      touchStartY = event.touches[0].clientY;
-      touchTracking = true;
-    }, { passive: true });
-
-    swipeSurface.addEventListener("touchend", (event) => {
-      if (!touchTracking || !event.changedTouches.length) return;
-      touchTracking = false;
-      const touch = event.changedTouches[0];
-      const deltaX = touch.clientX - touchStartX;
-      const deltaY = touch.clientY - touchStartY;
-      if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
-        goTo(current + (deltaX < 0 ? 1 : -1));
-      }
-    }, { passive: true });
-
-    swipeSurface.addEventListener("touchcancel", () => { touchTracking = false; }, { passive: true });
-
-    function auditSlideSafeArea() {
-      const violations = [];
-      slides.forEach((slide, index) => {
-        const slideRect = slide.getBoundingClientRect();
-        const scale = slideRect.width / 1920;
-        const safe = { left: slideRect.left + 58 * scale, right: slideRect.right - 58 * scale, top: slideRect.top + 58 * scale, bottom: slideRect.bottom - 58 * scale };
-        [...slide.querySelectorAll(".slide-body *")].forEach((element) => {
-          const rect = element.getBoundingClientRect();
-          if (rect.left < safe.left - 1 || rect.right > safe.right + 1 || rect.top < safe.top - 1 || rect.bottom > safe.bottom + 1) {
-            violations.push("слайд " + String(index + 1).padStart(2, "0") + ": " + element.className);
-          }
-        });
-      });
-      if (violations.length) console.warn("Контент выходит за безопасную зону:", violations);
-    }
-
-    const hashSlide = Number(location.hash.replace("#slide-", "")) - 1;
-    if (Number.isInteger(hashSlide) && hashSlide >= 0) current = Math.min(hashSlide, slides.length - 1);
-    goTo(current);
-    updateFullscreenButton();
-    fitCanvas();
-    document.fonts.ready.then(fitCanvas);
-    requestAnimationFrame(auditSlideSafeArea);
   </script>
 </body>
 </html>
