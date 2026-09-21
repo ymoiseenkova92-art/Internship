@@ -1,0 +1,665 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Проверка каркаса из скилла</title><style>
+:root {
+  --design-w: 1920px;
+  --design-h: 1080px;
+  --aspect-ratio: 16 / 9;
+  --safe: 58px;
+  --browser-stage-padding-x: 20px;
+  --browser-stage-padding-y: 20px;
+  --frame-controls-gap: 18px;
+  --type-min: 40px;   /* минимальный кегль текста на канве 1920 */
+  --scale: 1;         /* текущий масштаб канвы, выставляет fitCanvas() */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+.stage {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;          /* следует за сворачиванием адресной строки */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--frame-controls-gap);
+  padding:
+    max(var(--browser-stage-padding-y), env(safe-area-inset-top))
+    max(var(--browser-stage-padding-x), env(safe-area-inset-right))
+    max(var(--browser-stage-padding-y), env(safe-area-inset-bottom))
+    max(var(--browser-stage-padding-x), env(safe-area-inset-left));
+  overflow: hidden;
+  background: #000;
+  touch-action: pan-y pinch-zoom;
+}
+
+.presentation-frame {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  flex: none;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 1920px;
+  height: 1080px;
+  aspect-ratio: 16 / 9;
+  flex: none;
+  overflow: hidden;
+  transform-origin: top left;
+  will-change: transform;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 58px;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+
+.slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.slide > * {
+  position: relative;
+  z-index: 1;
+}
+
+.slide-body {
+  flex: 1 1 auto;
+  width: 1804px;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.topline,
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 auto;
+  color: var(--muted, #68686a);
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.topline {
+  height: 15px;
+  min-height: 15px;
+  letter-spacing: .02em;
+}
+
+.topline .mark {
+  font-weight: 400;
+  letter-spacing: normal;
+}
+
+.footer {
+  height: 45px;
+  min-height: 45px;
+  margin-top: auto;
+  padding-top: 30px;
+}
+
+.footer .page-no {
+  color: var(--muted, #68686a);
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.slide.dark .topline,
+.slide.dark .footer,
+.slide.dark .footer .page-no {
+  color: rgba(241, 241, 238, .54);
+}
+
+.controls {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 40px;
+  color: #f5f5f2;
+  font: 14px Arial, sans-serif;
+}
+
+.nav-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 999px;
+  background: rgba(24, 24, 24, .94);
+  backdrop-filter: blur(14px);
+}
+
+.nav-group button {
+  width: 30px;
+  height: 26px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #f5f5f2;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.controls .count {
+  min-width: 60px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.nav-group .control-divider {
+  width: 1px;
+  height: 18px;
+  margin: 0 3px;
+  background: rgba(255, 255, 255, .16);
+}
+
+.nav-group .fullscreen {
+  font-size: 19px;
+  line-height: 1;
+}
+
+.nav-group .restart {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 26px;
+  padding: 0;
+  font-size: 14px;
+  letter-spacing: .01em;
+}
+
+/* увеличенные зоны нажатия на любом сенсорном экране */
+html[data-viewport="tablet"] .nav-group,
+html[data-viewport="mobile"] .nav-group {
+  gap: 8px;
+}
+
+html[data-viewport="tablet"] .nav-group button,
+html[data-viewport="tablet"] .nav-group .restart,
+html[data-viewport="mobile"] .nav-group button,
+html[data-viewport="mobile"] .nav-group .restart {
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+}
+
+/* на телефоне сцена жмётся к краям — это до 5 % масштаба */
+html[data-viewport="mobile"] .stage {
+  --browser-stage-padding-x: 12px;
+  --browser-stage-padding-y: 12px;
+}
+
+/* телефон лёжа: панель поверх слайда, появляется по касанию */
+html[data-viewport="mobile"][data-orientation="landscape"] .stage {
+  --frame-controls-gap: 0px;
+}
+
+html[data-viewport="mobile"][data-orientation="landscape"] .controls {
+  position: absolute;
+  left: 50%;
+  bottom: max(10px, env(safe-area-inset-bottom));
+  translate: -50% 0;
+  width: auto;
+  min-height: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .3s ease, visibility .3s;
+}
+
+html[data-viewport="mobile"][data-orientation="landscape"] .controls.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+@media print {
+  @page {
+    size: 1920px 1080px;
+    margin: 0;
+  }
+
+  body {
+    overflow: visible;
+    background: #000;
+  }
+
+  .stage {
+    position: static;
+    display: block;
+    height: auto;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .presentation-frame {
+    width: 1920px;
+    height: auto;
+  }
+
+  .canvas {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    transform: none !important;
+  }
+
+  .slide {
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    page-break-after: always;
+    break-after: page;
+  }
+
+  .controls {
+    display: none;
+  }
+}
+
+body{color:#f1f1ee;font:400 15px/1.5 Helvetica,Arial,sans-serif}
+.canvas{background:#111}
+h1{font-size:96px;line-height:1.02;margin:40px 0 0;font-weight:400}
+.lead{font-size:48px;line-height:1.25;margin:40px 0 0;max-width:1300px;color:#c9c9c4}
+.small{font-size:40px;line-height:1.4;margin:32px 0 0;color:#8b8b88}
+
+</style></head><body>
+<div class="stage" id="stage">
+  <div class="presentation-frame" id="frame">
+    <main class="canvas" id="canvas">
+      <section class="slide is-active" data-label="Обложка">
+  <div class="topline"><span class="mark">Проверка каркаса</span><span>2026 / v1</span></div>
+  <div class="slide-body">
+    <h1>Заголовок<br>на девяносто шесть</h1>
+    <p class="lead">Подзаголовок кеглем 48 — читается на телефоне лёжа.</p>
+    <p class="small">Мелкий текст 40 — нижняя граница кегля на канве 1920.</p>
+  </div>
+  <div class="footer"><span>Обложка</span><span class="page-no">01 / 03</span></div>
+</section>
+<section class="slide" data-label="Второй">
+  <div class="topline"><span class="mark">Проверка каркаса</span><span>2026 / v1</span></div>
+  <div class="slide-body">
+    <h1>Второй слайд</h1>
+    <p class="lead">Подзаголовок кеглем 48 — читается на телефоне лёжа.</p>
+    <p class="small">Мелкий текст 40 — нижняя граница кегля на канве 1920.</p>
+  </div>
+  <div class="footer"><span>Второй</span><span class="page-no">02 / 03</span></div>
+</section>
+<section class="slide" data-label="Третий">
+  <div class="topline"><span class="mark">Проверка каркаса</span><span>2026 / v1</span></div>
+  <div class="slide-body">
+    <h1>Третий слайд</h1>
+    <p class="lead">Подзаголовок кеглем 48 — читается на телефоне лёжа.</p>
+    <p class="small">Мелкий текст 40 — нижняя граница кегля на канве 1920.</p>
+  </div>
+  <div class="footer"><span>Третий</span><span class="page-no">03 / 03</span></div>
+</section>
+    </main>
+  </div>
+  <div class="controls" id="controls" aria-label="Навигация по слайдам">
+    <div class="nav-group">
+      <button type="button" class="restart" data-restart aria-label="Вернуться в начало" title="Restart">R</button>
+      <span class="control-divider" aria-hidden="true"></span>
+      <button type="button" data-prev aria-label="Предыдущий слайд">←</button>
+      <span class="count">01 / 03</span>
+      <button type="button" data-next aria-label="Следующий слайд">→</button>
+      <span class="control-divider" aria-hidden="true"></span>
+      <button type="button" class="fullscreen" data-fullscreen aria-label="На весь экран" title="Enter full screen">⛶</button>
+    </div>
+  </div>
+</div><script>
+function formatPageNumber(index, total) {
+  return String(index + 1).padStart(2, "0") +
+    " / " + String(total).padStart(2, "0");
+}
+
+const slides = [...document.querySelectorAll(".slide")];
+const count = document.querySelector(".count");
+let current = 0;
+
+function goTo(index) {
+  current = Math.max(0, Math.min(index, slides.length - 1));
+  slides.forEach((slide, i) => {
+    slide.classList.toggle("is-active", i === current);
+  });
+  count.textContent = formatPageNumber(current, slides.length);
+  const pageNo = slides[current].querySelector(".page-no");
+  if (pageNo) pageNo.textContent = formatPageNumber(current, slides.length);
+  history.replaceState(null, "", "#slide-" + String(current + 1));
+  revealControls();          /* см. раздел 8.2 */
+}
+
+document.querySelector("[data-prev]")
+  .addEventListener("click", () => goTo(current - 1));
+
+document.querySelector("[data-next]")
+  .addEventListener("click", () => goTo(current + 1));
+
+document.querySelector("[data-restart]")
+  .addEventListener("click", () => goTo(0));
+
+document.addEventListener("keydown", (event) => {
+  if (event.key.toLowerCase() === "r") goTo(0);
+  if (event.key === "Home") goTo(0);
+  if (event.key === "End") goTo(slides.length - 1);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (["ArrowRight", "ArrowDown", "PageDown", " "].includes(event.key)) {
+    event.preventDefault();
+    goTo(current + 1);
+  }
+  if (["ArrowLeft", "ArrowUp", "PageUp"].includes(event.key)) {
+    event.preventDefault();
+    goTo(current - 1);
+  }
+});
+
+const frame = document.querySelector("#frame");
+const canvas = document.querySelector("#canvas");
+const controls = document.querySelector("#controls");
+const stage = document.querySelector("#stage");
+const root = document.documentElement;
+
+function fitCanvas() {
+  const vv = window.visualViewport;
+
+  /* пользователь увеличил страницу двумя пальцами — не мешать ему */
+  if (vv && vv.scale > 1.01) return;
+
+  setViewport();
+
+  const cs = getComputedStyle(stage);
+  const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+  const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+
+  /* в наложенном режиме панель не отнимает высоту */
+  const overlay = root.dataset.viewport === "mobile" &&
+    root.dataset.orientation === "landscape";
+  const gap = overlay ? 0 : (parseFloat(cs.gap) || 0);
+  const controlHeight = overlay ? 0 : (controls.offsetHeight || 40);
+
+  const viewportWidth = vv ? vv.width : window.innerWidth;
+  const viewportHeight = vv ? vv.height : window.innerHeight;
+
+  const availableWidth = Math.max(280, viewportWidth - padX);
+  const availableHeight = Math.max(240, viewportHeight - padY - controlHeight - gap);
+
+  const scale = Math.min(availableWidth / 1920, availableHeight / 1080);
+
+  frame.style.width = (1920 * scale) + "px";
+  frame.style.height = (1080 * scale) + "px";
+  controls.style.width = overlay ? "auto" : (1920 * scale) + "px";
+  canvas.style.transform = "scale(" + scale + ")";
+  root.style.setProperty("--scale", scale.toFixed(4));
+}
+
+let fitRaf = 0;
+function scheduleFit() {
+  if (!fitRaf) fitRaf = requestAnimationFrame(() => { fitRaf = 0; fitCanvas(); });
+}
+
+fitCanvas();
+window.addEventListener("resize", scheduleFit);
+window.addEventListener("orientationchange", () => setTimeout(fitCanvas, 250));
+if (window.visualViewport) {
+  window.visualViewport.addEventListener("resize", scheduleFit);
+}
+
+function setViewport() {
+  const vv = window.visualViewport;
+  const w = vv ? vv.width : window.innerWidth;
+  const h = vv ? vv.height : window.innerHeight;
+  const shortSide = Math.min(w, h);
+  const touch = matchMedia("(pointer:coarse)").matches || shortSide < 500;
+
+  root.dataset.viewport = shortSide < 500
+    ? "mobile"
+    : (touch && shortSide < 900 ? "tablet" : "desktop");
+
+  root.dataset.orientation = w > h ? "landscape" : "portrait";
+}
+
+let controlsTimer = 0;
+
+function revealControls() {
+  const overlay = root.dataset.viewport === "mobile" &&
+    root.dataset.orientation === "landscape";
+  if (!overlay) return;
+  controls.classList.add("is-visible");
+  clearTimeout(controlsTimer);
+  controlsTimer = setTimeout(() => controls.classList.remove("is-visible"), 2600);
+}
+
+stage.addEventListener("pointerdown", revealControls);
+
+let fullscreenButton = document.querySelector("[data-fullscreen]");
+const docEl = document.documentElement;
+const enter = docEl.requestFullscreen || docEl.webkitRequestFullscreen;
+const exit = document.exitFullscreen || document.webkitExitFullscreen;
+const supported = enter && exit &&
+  document.fullscreenEnabled !== false &&
+  document.webkitFullscreenEnabled !== false;
+
+if (!supported) {
+  fullscreenButton.remove();
+  fullscreenButton = null;
+} else {
+  function updateFullscreenButton() {
+    const active = document.fullscreenElement || document.webkitFullscreenElement;
+    fullscreenButton.textContent = active ? "×" : "⛶";
+    fullscreenButton.title = active ? "Exit full screen" : "Enter full screen";
+  }
+
+  fullscreenButton.addEventListener("click", () => {
+    const active = document.fullscreenElement || document.webkitFullscreenElement;
+    try {
+      const result = active ? exit.call(document) : enter.call(docEl);
+      if (result && result.catch) result.catch(() => {});
+    } catch (error) {}
+  });
+
+  document.addEventListener("fullscreenchange", () => {
+    updateFullscreenButton();
+    fitCanvas();
+  });
+  document.addEventListener("webkitfullscreenchange", () => {
+    updateFullscreenButton();
+    fitCanvas();
+  });
+
+  updateFullscreenButton();
+}
+
+const hashSlide = Number(location.hash.replace("#slide-", "")) - 1;
+
+if (Number.isInteger(hashSlide) && hashSlide >= 0) {
+  current = Math.min(hashSlide, slides.length - 1);
+}
+
+goTo(current);
+
+let touchStartX = 0;
+let touchStartY = 0;
+let touchTracking = false;
+
+stage.addEventListener("touchstart", (event) => {
+  if (event.touches.length !== 1) { touchTracking = false; return; }
+  touchStartX = event.touches[0].clientX;
+  touchStartY = event.touches[0].clientY;
+  touchTracking = true;
+}, { passive: true });
+
+stage.addEventListener("touchend", (event) => {
+  if (!touchTracking || !event.changedTouches.length) return;
+  touchTracking = false;
+
+  /* страница увеличена — палец двигает изображение, а не листает слайды */
+  if (window.visualViewport && window.visualViewport.scale > 1.01) return;
+
+  const touch = event.changedTouches[0];
+  const deltaX = touch.clientX - touchStartX;
+  const deltaY = touch.clientY - touchStartY;
+
+  if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2) {
+    goTo(current + (deltaX < 0 ? 1 : -1));
+  }
+}, { passive: true });
+
+stage.addEventListener("touchcancel", () => {
+  touchTracking = false;
+}, { passive: true });
+
+function auditSlideSafeArea() {
+  const violations = [];
+
+  slides.forEach((slide, index) => {
+    const slideRect = slide.getBoundingClientRect();
+    if (!slideRect.width) return;
+    const scale = slideRect.width / 1920;
+    const safe = {
+      left: slideRect.left + 58 * scale,
+      right: slideRect.right - 58 * scale,
+      top: slideRect.top + 58 * scale,
+      bottom: slideRect.bottom - 58 * scale
+    };
+
+    [...slide.querySelectorAll(".slide-body *")].forEach((element) => {
+      const rect = element.getBoundingClientRect();
+      if (!rect.width && !rect.height) return;
+
+      if (
+        rect.left < safe.left - 1 ||
+        rect.right > safe.right + 1 ||
+        rect.top < safe.top - 1 ||
+        rect.bottom > safe.bottom + 1
+      ) {
+        violations.push(
+          "слайд " + String(index + 1).padStart(2, "0") +
+          ": " + element.className
+        );
+      }
+    });
+  });
+
+  return violations;
+}
+
+function auditDeckViewport() {
+  const problems = [];
+  const notes = [];
+  const doc = document.documentElement;
+  const scale = parseFloat(getComputedStyle(doc).getPropertyValue("--scale")) || 1;
+
+  /* прокрутка и геометрия слайда */
+  if (doc.scrollWidth > doc.clientWidth + 1)
+    problems.push("горизонтальная прокрутка: " + doc.scrollWidth + " при " + doc.clientWidth);
+  if (doc.scrollHeight > doc.clientHeight + 1)
+    problems.push("вертикальная прокрутка: " + doc.scrollHeight + " при " + doc.clientHeight);
+
+  const f = frame.getBoundingClientRect();
+  if (Math.abs(f.width / f.height - 16 / 9) > 0.01)
+    problems.push("пропорции слайда: " + (f.width / f.height).toFixed(3) + " вместо 1.778");
+  if (f.left < -1 || f.top < -1 ||
+      f.right > doc.clientWidth + 1 || f.bottom > doc.clientHeight + 1)
+    problems.push("слайд выходит за экран");
+
+  /* панель управления */
+  const overlay = doc.dataset.viewport === "mobile" &&
+    doc.dataset.orientation === "landscape";
+  const c = controls.getBoundingClientRect();
+  if (!overlay && c.top < f.bottom - 1) problems.push("панель наезжает на слайд");
+  if (overlay && (c.bottom > doc.clientHeight + 1 || c.right > doc.clientWidth + 1))
+    problems.push("панель выходит за экран");
+
+  const need = (matchMedia("(pointer:coarse)").matches ||
+    Math.min(innerWidth, innerHeight) < 500) ? 44 : 24;
+  [...controls.querySelectorAll("button")].forEach((b) => {
+    const r = b.getBoundingClientRect();
+    if (r.width < need - 0.5 || r.height < need - 0.5)
+      problems.push("кнопка «" + (b.getAttribute("aria-label") || "") + "»: " +
+        r.width.toFixed(0) + "×" + r.height.toFixed(0) + " вместо " + need);
+  });
+
+  /* увеличение страницы не заблокировано */
+  const meta = document.querySelector('meta[name="viewport"]');
+  if (meta && /user-scalable\s*=\s*no|maximum-scale\s*=\s*1(?!\d)/.test(meta.content))
+    problems.push("запрещено увеличение страницы");
+
+  problems.push(...auditSlideSafeArea());
+
+  /* читаемость активного слайда */
+  const active = document.querySelector(".slide.is-active");
+  const texts = [...active.querySelectorAll(".slide-body *")].filter((el) =>
+    [...el.childNodes].some((n) => n.nodeType === 3 && n.nodeValue.trim())
+  );
+
+  if (texts.length) {
+    const sizes = texts.map((el) => parseFloat(getComputedStyle(el).fontSize) || 0);
+    const min = Math.min(...sizes);
+    const max = Math.max(...sizes);
+
+    if (max * scale < 12)
+      problems.push("даже самый крупный текст слайда даёт " +
+        (max * scale).toFixed(1) + " px — слайд нечитаем целиком");
+    if (min * scale < 12)
+      notes.push("мельчайший текст " + min + " px канвы даёт " +
+        (min * scale).toFixed(1) + " px на экране — читается только с увеличением");
+  }
+
+  return {
+    viewport: doc.dataset.viewport,
+    orientation: doc.dataset.orientation,
+    scale: +scale.toFixed(4),
+    problems,
+    notes
+  };
+}
+
+window.auditDeckViewport=auditDeckViewport;</script></body></html>
