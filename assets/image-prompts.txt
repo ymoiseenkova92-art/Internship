@@ -1,0 +1,13 @@
+Built-in ImageGen was used for all four new images. Covers are generated presentation mockups; original case illustrations are retained on the Glam AI case page.
+
+HERO
+Use case: photorealistic-natural. Asset: high resolution landscape portfolio hero photograph, 3:2 wide. Neutral black and white fine-art architecture photograph of a quiet minimalist concrete gallery, pale plaster wall, subtle daylight and a low monolithic bench, expansive empty upper half for very large black typography. Calm editorial photography, crisp material detail, soft gray tones, no people, no devices, no text or logos. Save image for use in local HTML website.
+
+GLAM
+Use case: ui-mockup. Create a polished wide 3:2 project cover for minimalist designer portfolio. Input is reference for the REAL Glam AI app screens: reuse their visual design, black mobile interface and pink accent. Show three large, perfectly crisp, straight-on smartphone screens centered on pale warm gray seamless background, delicate soft shadows, uniform light, restrained editorial composition. Keep app recognizable and correct. No giant promotional headings, no background typography, no colorful environment, no floating decorations. Devices fill 75% of image height. Clean premium neutral mockup concept.
+
+DASHBOARD
+Use case: ui-mockup. Create a polished wide 3:2 project cover for minimalist designer portfolio. Reference is actual analytics dashboard design. Single large front-facing desktop screen showing its white analytics dashboard with turquoise cards, charts, left navigation and calendar, sharp detailed interface. Pale warm gray seamless studio background, subtle soft shadow, restrained editorial composition. Black thin device bezel. No title outside screen, no Top-Skop oversized typography, no teal background. Screen occupies 75% image width. Match neutral premium mockup family.
+
+IKIGAI
+Use case: ui-mockup. Create a polished wide 3:2 project cover for minimalist designer portfolio. Reference is actual IKIGAI mobile project identity. Three front-facing slim black smartphones, central screen retains black background with crisp white IKIGAI logo from reference, side screens show restrained Japanese restaurant menu interface with tasteful small food photographs and light warm gray backgrounds. Pale warm gray seamless studio background, soft subtle shadows, editorial calm. No smoky environment, no plants, no large promotional typography outside screens. Devices fill 75% height. Unified premium neutral mockup family.
